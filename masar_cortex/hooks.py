@@ -137,13 +137,15 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"Purchase Receipt": {
+		"on_submit": "masar_cortex.custom.purchase_receipt.purchase_receipt.on_submit"
+	},
+    "Batch": {
+        "validate": "masar_cortex.custom.batch.batch.validate", 
+        "before_naming" :  "masar_cortex.custom.batch.batch.get_git_no"
+    }
+}
 
 # Scheduled Tasks
 # ---------------
@@ -241,4 +243,16 @@ app_license = "mit"
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
-
+fixtures = [
+    {"dt": "Custom Field", "filters": [
+        [
+            "name", "in", [
+                    "Purchase Receipt-custom_has_git", 
+                    "Purchase Receipt-custom_git_no",
+                    "Purchase Order-custom_has_git",
+                    "Purchase Order-custom_git_no", 
+                    "Batch-custom_git_no"
+            ]
+        ]
+    ]}
+]
