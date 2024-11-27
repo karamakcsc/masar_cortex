@@ -251,8 +251,44 @@ fixtures = [
                     "Purchase Receipt-custom_git_no",
                     "Purchase Order-custom_has_git",
                     "Purchase Order-custom_git_no", 
-                    "Batch-custom_git_no"
+                    "Batch-custom_git_no",
+                    "Purchase Receipt Item-custom_gross_weight",
+                    "Batch-custom_gross_weight"
             ]
         ]
-    ]}
+    ]},
+    {
+        "doctype": "Property Setter",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                    "Purchase Receipt Item-net_amount-hidden",
+                    "Purchase Receipt Item-main-field_order",
+                    "Purchase Receipt Item-from_warehouse-hidden",
+                    "Purchase Receipt Item-barcode-hidden",
+                    "Purchase Receipt Item-base_rate-permlevel",
+                    "Purchase Receipt Item-billed_amt-hidden",
+                    "Purchase Receipt Item-rate_difference_with_purchase_invoice-hidden",
+                    "Purchase Receipt Item-landed_cost_voucher_amount-hidden",
+                    "Purchase Receipt Item-base_net_amount-hidden",
+                    "Purchase Receipt Item-base_net_rate-hidden",
+                    "Purchase Receipt Item-net_rate-hidden",
+                    "Purchase Receipt Item-stock_uom_rate-hidden",
+                    "Purchase Receipt Item-base_amount-hidden",
+                    "Purchase Receipt Item-amount-hidden",
+                    "Purchase Receipt Item-rate-hidden",
+                    "Purchase Receipt Item-base_rate_with_margin-hidden",
+                    "Purchase Receipt Item-discount_amount-hidden",
+                    "Purchase Receipt Item-rate_with_margin-hidden",
+                    "Purchase Receipt Item-base_price_list_rate-hidden",
+                    "Purchase Receipt Item-price_list_rate-hidden",
+                    "Batch-batch_id-reqd",
+                    "Batch-main-field_order"
+  
+                ]
+            ]
+        ]
+    }
 ]
