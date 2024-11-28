@@ -3,6 +3,8 @@ import frappe
 def on_submit(self , method):
     if self.custom_has_git:
         add_git_code(self)
+        
+    # add_gross_weight(self)
 
 def add_git_code(self):
     for i in self.items: 
@@ -21,4 +23,13 @@ def add_git_code(self):
                         batch_doc = frappe.get_doc('Batch' , e.batch_no )
                         batch_doc.custom_git_no = self.custom_git_no
                         frappe.db.set_value('Batch' ,e.batch_no , 'custom_git_no' , self.custom_git_no)
-                            
+                        
+def add_gross_weight(self):
+    b = frappe.qb.DocType('Batch')
+    for i in self.items:
+        sql = frappe.qb.from_(b).select(b.name).where(b.item == i.item_code ).where(b.batch_qty == i.stock_qty).run(as_dict = True)
+        if sql and sql[0] and sql[0]['name']:
+            batch_doc = frappe.get_doc('Batch' , sql[0]['name'])
+            batch_doc.custom_gross_weight = i.custom_gross_weight
+            batch_doc.save()
+            frappe.db.set_value('Batch' , sql[0]['name'] , 'custom_gross_weight' , i.custom_gross_weight)

@@ -141,9 +141,11 @@ doc_events = {
 	"Purchase Receipt": {
 		"on_submit": "masar_cortex.custom.purchase_receipt.purchase_receipt.on_submit"
 	},
+    "Stock Entry": {
+        "on_submit": "masar_cortex.custom.stock_entry.stock_entry.on_submit"
+    },
     "Batch": {
-        "validate": "masar_cortex.custom.batch.batch.validate", 
-        "before_naming" :  "masar_cortex.custom.batch.batch.get_git_no"
+        "before_naming" :  "masar_cortex.custom.batch.batch.get_git_no",
     }
 }
 
@@ -285,7 +287,8 @@ fixtures = [
                     "Purchase Receipt Item-base_price_list_rate-hidden",
                     "Purchase Receipt Item-price_list_rate-hidden",
                     "Batch-batch_id-reqd",
-                    "Batch-main-field_order"
+                    "Batch-main-field_order", 
+                    "Batch-custom_thickness"
   
                 ]
             ]
