@@ -255,7 +255,8 @@ fixtures = [
                     "Purchase Order-custom_git_no", 
                     "Batch-custom_git_no",
                     "Purchase Receipt Item-custom_gross_weight",
-                    "Batch-custom_gross_weight"
+                    "Batch-custom_gross_weight",
+                    "Batch-custom_thickness"
             ]
         ]
     ]},
@@ -287,8 +288,8 @@ fixtures = [
                     "Purchase Receipt Item-base_price_list_rate-hidden",
                     "Purchase Receipt Item-price_list_rate-hidden",
                     "Batch-batch_id-reqd",
-                    "Batch-main-field_order", 
-                    "Batch-custom_thickness"
+                    "Batch-main-field_order"
+                    
   
                 ]
             ]
