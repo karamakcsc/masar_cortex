@@ -1,10 +1,9 @@
 import frappe
 
 def on_submit(self, method):
+    validate_qty(self)
     calc_cost_qty(self)
     
-
-
 
 def calc_cost_qty(self):
     if self.stock_entry_type == "Repack":
@@ -35,9 +34,25 @@ def calc_cost_qty(self):
                 # Update Basic Rate and Amount
                 # item.basic_rate = cost_per_unit
                 amount = cost_per_unit * item.qty
-                frappe.db.set_value("Stock Entry Detail", item.name, "basic_rate", cost_per_unit)
+                frappe.db.set_value("Stock Entry Detail", item.name, "valuation_rate", cost_per_unit)
                 frappe.db.set_value("Stock Entry Detail", item.name, "amount", amount)
         # self.reload()
         # Add a comment to the document
-        frappe.msgprint("Costs have been successfully distributed across finished goods.")
-    
+        # frappe.msgprint("Costs have been successfully distributed across finished goods.")
+
+
+
+def validate_qty(self):
+    if self.stock_entry_type == "Repack":
+        total_target_qty = 0
+        total_source_qty = 0
+
+        for item in self.items:
+            if item.s_warehouse:
+                total_source_qty += item.qty
+                                
+            if item.t_warehouse:
+                total_target_qty += item.qty
+                     
+        if total_target_qty != total_source_qty:
+            frappe.throw("Input Quantity Does Not Equal The Output Quantity.")            

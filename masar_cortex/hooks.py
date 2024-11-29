@@ -256,7 +256,9 @@ fixtures = [
                     "Batch-custom_git_no",
                     "Purchase Receipt Item-custom_gross_weight",
                     "Batch-custom_gross_weight",
-                    "Batch-custom_thickness"
+                    "Batch-custom_thickness",
+                    "Stock Entry Detail-custom_weight_per_unit",
+                    "Stock Entry Detail-custom_weight_uom"
             ]
         ]
     ]},
