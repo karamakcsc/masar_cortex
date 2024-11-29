@@ -1,6 +1,6 @@
 import frappe
 
-def on_submit(self, method):
+def validate(self, method):
     validate_qty(self)
     calc_cost_qty(self)
     
@@ -35,6 +35,7 @@ def calc_cost_qty(self):
                 # item.basic_rate = cost_per_unit
                 amount = cost_per_unit * item.qty
                 frappe.db.set_value("Stock Entry Detail", item.name, "valuation_rate", cost_per_unit)
+                frappe.db.set_value("Stock Entry Detail", item.name, "basic_rate", cost_per_unit)
                 frappe.db.set_value("Stock Entry Detail", item.name, "amount", amount)
         # self.reload()
         # Add a comment to the document
