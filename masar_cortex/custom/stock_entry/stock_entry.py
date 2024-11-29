@@ -2,9 +2,10 @@ import frappe
 
 def validate(self, method):
     validate_qty(self)
-
-def on_submit(self, method):
     calc_cost_qty(self)
+
+# def on_submit(self, method):
+#     calc_cost_qty(self)
 
 def calc_cost_qty(self):
     if self.stock_entry_type == "Repack":
@@ -16,6 +17,7 @@ def calc_cost_qty(self):
                 total_raw_material_cost += item.basic_rate * item.qty
             if item.is_finished_item and not item.is_scrap_item and item.t_warehouse:
                 total_finished_qty += item.qty
+        total_raw_material_cost  += self.total_additional_costs 
         # Validate that raw material cost and finished goods quantity are defined
         if total_raw_material_cost == 0:
             frappe.throw("Total raw material cost is zero. Please ensure raw materials are properly defined.")
@@ -30,12 +32,14 @@ def calc_cost_qty(self):
                 # Update Basic Rate and Amount
                 # item.basic_rate = cost_per_unit
                 amount = cost_per_unit * item.qty
-                frappe.db.set_value("Stock Entry Detail", item.name, "valuation_rate", cost_per_unit)
-                frappe.db.set_value("Stock Entry Detail", item.name, "basic_rate", cost_per_unit)
-                frappe.db.set_value("Stock Entry Detail", item.name, "amount", amount)
+                # frappe.msgprint(f"Updated item {item.item_code} with Valuation Rate: {cost_per_unit}, Amount: {amount}")
+                item.basic_rate = cost_per_unit
+                item.valuation_rate = cost_per_unit
+                item.amount = amount
+                self.save
         # self.reload()
         # Add a comment to the document
-        frappe.msgprint("Costs have been successfully distributed across finished goods.")
+        # frappe.msgprint("Costs have been successfully distributed across finished goods.")
 
 
 def validate_qty(self):
