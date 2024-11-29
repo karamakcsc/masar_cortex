@@ -142,7 +142,8 @@ doc_events = {
 		"on_submit": "masar_cortex.custom.purchase_receipt.purchase_receipt.on_submit"
 	},
     "Stock Entry": {
-        "validate": "masar_cortex.custom.stock_entry.stock_entry.validate"
+        "validate": "masar_cortex.custom.stock_entry.stock_entry.validate",
+        "validate": "masar_cortex.custom.stock_entry.stock_entry.on_submit"
     },
     "Batch": {
         "before_naming" :  "masar_cortex.custom.batch.batch.get_git_no",
