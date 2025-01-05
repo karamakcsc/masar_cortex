@@ -1,5 +1,5 @@
 import frappe
-
+import json
 def validate(self, method):
     validate_qty(self)
     calc_cost_qty(self)
@@ -64,3 +64,24 @@ def validate_qty(self):
                      
         if total_target_qty != total_source_qty:
             frappe.throw("Input Quantity Does Not Equal The Output Quantity.")            
+            
+            
+@frappe.whitelist()    
+def calculate_cost_qty(self):
+    self = frappe._dict(json.loads(self))
+    if self.get('stock_entry_type') == "Slitting":
+        total_raw_material_cost = 0
+        total_finished_qty = 0
+        for item in self.get('items'):
+            if item.s_warehouse:
+                total_raw_material_cost = total_raw_material_cost + (item.get('basic_rate') * item.get('qty'))
+            if item.get('is_finished_item') and not item.get('is_scrap_item') and item.get('t_warehouse'):
+                total_finished_qty += item.get('qty')
+        if self.total_additional_costs:
+            total_raw_material_cost  += self.get('total_additional_costs')
+        cost_per_unit = (total_raw_material_cost / total_finished_qty) 
+        return str(f"""
+                   Total Finished Qty : {total_finished_qty}<br>
+                   Total Raw Material Cost : { total_raw_material_cost} <br>
+                   Cost Per Unit : {cost_per_unit}
+                   """)
