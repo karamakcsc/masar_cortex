@@ -7,7 +7,7 @@ frappe.ui.form.on('Stock Entry', {
             frappe.call({
                 method: "masar_cortex.custom.stock_entry.stock_entry.calculate_cost_qty", 
                 args:{
-                    self:doc.frm,
+                    self:frm.doc,
                 }, 
                 callback: function(r){ 
                     frappe.msgprint(r.message);
