@@ -293,9 +293,11 @@ fixtures = [
                     "Purchase Receipt Item-base_price_list_rate-hidden",
                     "Purchase Receipt Item-price_list_rate-hidden",
                     "Batch-batch_id-reqd",
-                    "Batch-main-field_order"
-                    
-  
+                    "Batch-main-field_order",
+                    "Stock Entry Detail-basic_amount-allow_on_submit",
+                    "Stock Entry Detail-valuation_rate-allow_on_submit",
+                    "Stock Entry Detail-amount-allow_on_submit",
+                    "Stock Entry Detail-basic_rate-allow_on_submit"
                 ]
             ]
         ]

@@ -1,5 +1,11 @@
 import frappe
 import json
+from erpnext.stock.doctype.stock_entry.stock_entry import StockEntry
+update_stock_ledger = StockEntry.update_stock_ledger
+make_gl_entries = StockEntry.make_gl_entries
+set_total_incoming_outgoing_value = StockEntry.set_total_incoming_outgoing_value
+
+
 def validate(self, method):
     validate_qty(self)
     calc_cost_qty(self)
@@ -46,10 +52,11 @@ def calc_cost_qty(self):
                 item.valuation_rate  = 0.01
                 item.amount = item.qty * item.basic_rate
                 self.save
+        return True
 
 
 def validate_qty(self):
-    if self.stock_entry_type == "Repack":
+    if self.stock_entry_type == "Slitting":
         total_target_qty = 0
         total_source_qty = 0
 
@@ -75,7 +82,7 @@ def calculate_cost_qty(self):
         for item in self.get('items'):
             if item.get('s_warehouse'):
                 total_raw_material_cost = total_raw_material_cost + (item.get('basic_rate') * item.get('qty'))
-            if item.get('is_finished_item') and not item.get('is_scrap_item') and item.get('t_warehouse'):
+            if not item.get('is_scrap_item') and item.get('t_warehouse'):
                 total_finished_qty += item.get('qty')
         if self.get('total_additional_costs'):
             total_raw_material_cost  += self.get('total_additional_costs')
@@ -85,3 +92,61 @@ def calculate_cost_qty(self):
                    Total Raw Material Cost : { total_raw_material_cost} <br>
                    Cost Per Unit : {cost_per_unit}
                    """)
+        
+        
+@frappe.whitelist()
+def recalculate_costs(self):
+    self = frappe._dict(json.loads(self))
+    if self.stock_entry_type == "Slitting":
+        total_raw_material_cost = 0
+        total_finished_qty = 0
+        for item in self.get('items'):
+            if item.get('s_warehouse'):
+                total_raw_material_cost = total_raw_material_cost + (item.get('basic_rate') * item.get('qty'))
+            if  not item.get('is_scrap_item') and item.get('t_warehouse'):# item.get('is_finished_item') and not item.get('is_scrap_item') and item.get('t_warehouse'):
+                total_finished_qty += item.get('qty')
+        if self.get('total_additional_costs'):
+            total_raw_material_cost += self.get('total_additional_costs')
+
+        if total_raw_material_cost == 0:
+            frappe.throw("Total raw material cost is zero. Please ensure raw materials are properly defined.")
+        if total_finished_qty == 0:
+            frappe.throw("Total finished goods quantity is zero. Please ensure finished goods are properly defined.")
+
+        cost_per_unit = (total_raw_material_cost / total_finished_qty) 
+        for item in self.get('items'):
+            if not item.get('is_scrap_item') and item.get('t_warehouse'): #item.get('is_finished_item') and not item.get('is_scrap_item') and item.get('t_warehouse'):
+                frappe.db.set_value(item['doctype'], item['name'], "basic_rate", cost_per_unit)
+                frappe.db.set_value(item['doctype'], item['name'], "valuation_rate", cost_per_unit)
+                frappe.db.set_value(item['doctype'], item['name'], "amount", cost_per_unit * item.get('qty'))
+            elif item.get('is_scrap_item'):
+                frappe.db.set_value(item['doctype'], item['name'], "basic_rate", 0.01)
+                frappe.db.set_value(item['doctype'], item['name'], "valuation_rate", 0.01)
+                frappe.db.set_value(item['doctype'], item['name'], "amount", 0.01 * item.get('qty'))
+        # self.run_method('save')
+        frappe.db.commit()
+        doc = frappe.get_doc("Stock Entry", self['name'])
+        set_total_incoming_outgoing_value(doc)
+        
+        sle = frappe.qb.DocType("Stock Ledger Entry")
+        sle_sql = (
+            frappe.qb.from_(sle)
+            .select(sle.name)
+            .where(sle.voucher_no == doc.name)
+        ).run(as_dict=True)
+        update_stock_ledger(doc)
+        for sle_name in sle_sql:
+            frappe.db.set_value("Stock Ledger Entry", sle_name.name, "is_cancelled", 1)
+        
+        gle = frappe.qb.DocType("GL Entry")
+        gle_sql = (
+            frappe.qb.from_(gle)
+            .select(gle.name)
+            .where(gle.voucher_no == doc.name)
+        ).run(as_dict=True)
+        make_gl_entries(doc)
+        for gle_name in gle_sql:
+            frappe.db.set_value("GL Entry", gle_name.name, "is_cancelled", 1)
+        
+        
+    return True
