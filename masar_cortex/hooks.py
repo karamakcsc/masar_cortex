@@ -298,7 +298,9 @@ fixtures = [
                     "Stock Entry Detail-valuation_rate-allow_on_submit",
                     "Stock Entry Detail-amount-allow_on_submit",
                     "Stock Entry Detail-basic_rate-allow_on_submit",
-                    "Stock Entry Detail-additional_cost-allow_on_submit"
+                    "Stock Entry Detail-additional_cost-allow_on_submit",
+                    "Stock Entry Detail-is_scrap_item-allow_on_submit",
+                    "Stock Entry Detail-is_finished_item-allow_on_submit"
                 ]
             ]
         ]
