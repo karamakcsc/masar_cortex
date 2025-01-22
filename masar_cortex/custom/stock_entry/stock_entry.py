@@ -75,6 +75,10 @@ def validate_items(self):
                     frappe.throw(
                         f"Item {item.item_code} in Target Warehouse must be marked as either Finished or Scrap."
                     )
+                if item.is_finished_item and item.is_scrap_item:
+                    frappe.throw(
+                        f"Item {item.item_code} cannot be both Finished and Scrap."
+                    )
             
             
 @frappe.whitelist()    
