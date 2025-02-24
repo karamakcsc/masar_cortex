@@ -155,23 +155,23 @@ doc_events = {
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
+scheduler_events = {
 # 	"all": [
 # 		"masar_cortex.tasks.all"
 # 	],
-# 	"daily": [
-# 		"masar_cortex.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"masar_cortex.tasks.hourly"
-# 	],
+	# "daily": [
+	# 	"masar_cortex.jobs._repost_item_valuation.repost_stock_entry"
+	# ],
+	"hourly": [
+		"masar_cortex.jobs._repost_item_valuation.repost_stock_entry"
+	],
 # 	"weekly": [
 # 		"masar_cortex.tasks.weekly"
 # 	],
 # 	"monthly": [
 # 		"masar_cortex.tasks.monthly"
 # 	],
-# }
+}
 
 # Testing
 # -------
