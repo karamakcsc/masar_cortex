@@ -149,6 +149,9 @@ doc_events = {
     },
     "Batch": {
         "before_naming" :  "masar_cortex.custom.batch.batch.get_git_no",
+    },
+    "Sales Order": {
+        "validate": "masar_cortex.custom.sales_order.sales_order.validate"
     }
 }
 
@@ -160,14 +163,15 @@ scheduler_events = {
 # 		"masar_cortex.tasks.all"
 # 	],
 	"daily": [
-		"masar_cortex.jobs._repost_item_valuation.repost_stock_entry"
+		# "masar_cortex.jobs._repost_item_valuation.repost_stock_entry",
+        "masar_cortex.jobs.update_so_status.update_so_status"
 	],
 	# "hourly": [
 	# 	"masar_cortex.jobs._repost_item_valuation.repost_stock_entry"
 	# ],
-# 	"weekly": [
-# 		"masar_cortex.tasks.weekly"
-# 	],
+	"weekly": [
+		"masar_cortex.jobs._repost_item_valuation.repost_stock_entry"
+	],
 # 	"monthly": [
 # 		"masar_cortex.tasks.monthly"
 # 	],
@@ -261,7 +265,8 @@ fixtures = [
                     "Batch-custom_gross_weight",
                     "Batch-custom_thickness",
                     "Stock Entry Detail-custom_weight_per_unit",
-                    "Stock Entry Detail-custom_weight_uom"
+                    "Stock Entry Detail-custom_weight_uom",
+                    "Sales Order Item-custom_available_qty"
             ]
         ]
     ]},
