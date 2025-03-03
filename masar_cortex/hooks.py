@@ -162,10 +162,10 @@ scheduler_events = {
 # 	"all": [
 # 		"masar_cortex.tasks.all"
 # 	],
-	"daily": [
-		# "masar_cortex.jobs._repost_item_valuation.repost_stock_entry",
-        "masar_cortex.jobs.update_so_status.update_so_status"
-	],
+	# "daily": [
+	# 	# "masar_cortex.jobs._repost_item_valuation.repost_stock_entry",
+    #     "masar_cortex.jobs.update_so_status.update_so_status"
+	# ],
 	# "hourly": [
 	# 	"masar_cortex.jobs._repost_item_valuation.repost_stock_entry"
 	# ],
