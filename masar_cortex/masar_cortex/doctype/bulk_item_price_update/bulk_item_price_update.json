@@ -1,0 +1,124 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-04-13 09:58:06.867723",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "posting_date",
+  "brand",
+  "default_price_list",
+  "column_break_dlbq",
+  "item_group",
+  "supplier",
+  "via_excel",
+  "attach",
+  "section_break_sief",
+  "items",
+  "section_break_tbij",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_tbij",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Bulk Item Price Update",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval: doc.via_excel == 0",
+   "fieldname": "brand",
+   "fieldtype": "Link",
+   "label": "Brand",
+   "options": "Brand"
+  },
+  {
+   "fieldname": "column_break_dlbq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: doc.via_excel == 0",
+   "fieldname": "item_group",
+   "fieldtype": "Link",
+   "label": "Item Group",
+   "options": "Item Group"
+  },
+  {
+   "depends_on": "eval: doc.via_excel == 0",
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier"
+  },
+  {
+   "default": "0",
+   "fieldname": "via_excel",
+   "fieldtype": "Check",
+   "label": "Via Excel"
+  },
+  {
+   "depends_on": "eval: doc.via_excel == 0",
+   "fieldname": "section_break_sief",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "Bulk Item Price Item"
+  },
+  {
+   "depends_on": "via_excel",
+   "fieldname": "attach",
+   "fieldtype": "Attach",
+   "label": "Attach"
+  },
+  {
+   "fieldname": "default_price_list",
+   "fieldtype": "Link",
+   "label": "Default Price List",
+   "options": "Price List"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-04-13 12:14:55.415808",
+ "modified_by": "Administrator",
+ "module": "Masar Cortex",
+ "name": "Bulk Item Price Update",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

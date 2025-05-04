@@ -44,7 +44,9 @@ app_license = "mit"
 
 # include js in doctype views
 doctype_js = {
-    "Stock Entry" : "custom/stock_entry/stock_entry.js"
+    "Stock Entry" : "custom/stock_entry/stock_entry.js",
+    "Sales Order" : "custom/sales_order/sales_order.js",
+    "Item Group" : "custom/item_group/item_group.js"
     }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -149,9 +151,6 @@ doc_events = {
     },
     "Batch": {
         "before_naming" :  "masar_cortex.custom.batch.batch.get_git_no",
-    },
-    "Sales Order": {
-        "validate": "masar_cortex.custom.sales_order.sales_order.validate"
     }
 }
 
@@ -266,7 +265,9 @@ fixtures = [
                     "Batch-custom_thickness",
                     "Stock Entry Detail-custom_weight_per_unit",
                     "Stock Entry Detail-custom_weight_uom",
-                    "Sales Order Item-custom_available_qty"
+                    "Sales Order Item-custom_available_qty",
+                    "Item Group-custom_rate_kg",
+                    "Item Group-custom_update_item_price"
             ]
         ]
     ]},
