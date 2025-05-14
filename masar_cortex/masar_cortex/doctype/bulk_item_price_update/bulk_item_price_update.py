@@ -47,6 +47,7 @@ class BulkItemPriceUpdate(Document):
                 ti.brand,
                 tip.price_list,
                 ti.stock_uom,
+                ti.weight_per_unit,
                 tip.name AS item_price_ref
             FROM tabItem ti
             LEFT JOIN (
@@ -69,6 +70,7 @@ class BulkItemPriceUpdate(Document):
                     "item_code": item.item_code,
                     "item_name": item.item_name,
                     "item_group": item.item_group,
+                    "weight_per_unit": item.weight_per_unit or 0,
                     "old_price": item.price_list_rate or 0,
                     "brand": item.brand,
                     "price_list": item.price_list or self.default_price_list or '',
@@ -83,6 +85,10 @@ class BulkItemPriceUpdate(Document):
             for item in self.items:
                 if not item.uom or not item.price_list:
                     frappe.throw(f"Item {item.item_code} in row {item.idx} is missing UOM or Price List.")
+                if not item.weight_per_unit:
+                    frappe.throw(f"Item {item.item_code} in row {item.idx} is missing weight per unit.")
+                if not item.rate_per_kg:
+                    frappe.throw(f"Item {item.item_code} in row {item.idx} is missing rate per kg.")
                 if not item.new_price:
                     frappe.throw(f"Item {item.item_code} in row {item.idx} is missing new price.")
                 if item.item_price_ref and item.new_price:

@@ -10,9 +10,11 @@
   "item_name",
   "item_group",
   "brand",
-  "column_break_anor",
   "price_list",
   "uom",
+  "column_break_anor",
+  "weight_per_unit",
+  "rate_per_kg",
   "old_price",
   "new_price",
   "item_price_ref"
@@ -44,13 +46,13 @@
    "fetch_from": "item_code.brand",
    "fieldname": "brand",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Brand",
    "read_only": 1
   },
   {
    "fieldname": "price_list",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "Price List",
    "options": "Price List"
   },
@@ -78,19 +80,34 @@
    "fieldname": "new_price",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "New Price"
+   "label": "New Price",
+   "read_only": 1
   },
   {
    "fieldname": "item_price_ref",
    "fieldtype": "Data",
    "label": "Item Price Ref",
    "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "weight_per_unit",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Weight Per Unit"
+  },
+  {
+   "columns": 1,
+   "fieldname": "rate_per_kg",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Rate Per Kg"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-04-13 11:03:07.314461",
+ "modified": "2025-05-14 10:55:10.849659",
  "modified_by": "Administrator",
  "module": "Masar Cortex",
  "name": "Bulk Item Price Item",
