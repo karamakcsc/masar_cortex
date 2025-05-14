@@ -26,6 +26,8 @@ class BulkItemPriceUpdate(Document):
             for row in self.items:
                 if not row.price_list:
                     row.price_list = self.default_price_list or ''
+                if not row.rate_per_kg:
+                    row.rate_per_kg = self.default_rate_per_kg or 0
             return
         
         self.items = []
@@ -71,6 +73,7 @@ class BulkItemPriceUpdate(Document):
                     "item_name": item.item_name,
                     "item_group": item.item_group,
                     "weight_per_unit": item.weight_per_unit or 0,
+                    "rate_per_kg": self.default_rate_per_kg or 0,
                     "old_price": item.price_list_rate or 0,
                     "brand": item.brand,
                     "price_list": item.price_list or self.default_price_list or '',

@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "naming_series:",
  "creation": "2025-04-13 09:58:06.867723",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -11,12 +12,15 @@
   "column_break_dlbq",
   "item_group",
   "supplier",
+  "default_rate_per_kg",
   "via_excel",
   "attach",
   "section_break_sief",
   "items",
   "section_break_tbij",
-  "amended_from"
+  "amended_from",
+  "column_break_optm",
+  "naming_series"
  ],
  "fields": [
   {
@@ -71,6 +75,7 @@
    "default": "0",
    "fieldname": "via_excel",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Via Excel"
   },
   {
@@ -95,12 +100,28 @@
    "fieldtype": "Link",
    "label": "Default Price List",
    "options": "Price List"
+  },
+  {
+   "fieldname": "default_rate_per_kg",
+   "fieldtype": "Float",
+   "label": "Default Rate Per Kg"
+  },
+  {
+   "fieldname": "column_break_optm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "ITM-PRC-UPD-.",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "ITM-PRC-UPD-."
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-05-14 10:45:04.507062",
+ "modified": "2025-05-14 12:06:49.639736",
  "modified_by": "Administrator",
  "module": "Masar Cortex",
  "name": "Bulk Item Price Update",
