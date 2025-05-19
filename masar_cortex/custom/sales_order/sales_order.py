@@ -1,6 +1,16 @@
 import frappe
 
 
+def validate(self, method):
+    validate_actual_qty(self)
+
+        
+def validate_actual_qty(self):
+    if self.items:
+        for item in self.items:
+            if item.qty > item.custom_available_qty or item.custom_available_qty < 0:
+                frappe.throw(f"Available quantity for item {item.item_code} is less than the requested quantity.")
+                
 @frappe.whitelist()            
 def available_qty_sql(item, warehouse):
     if item:

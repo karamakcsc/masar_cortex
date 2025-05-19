@@ -151,7 +151,10 @@ doc_events = {
     },
     "Batch": {
         "before_naming" :  "masar_cortex.custom.batch.batch.get_git_no",
-    }
+    },
+    "Sales Order": {
+        "validate": "masar_cortex.custom.sales_order.sales_order.validate",
+    },
 }
 
 # Scheduled Tasks
@@ -267,7 +270,8 @@ fixtures = [
                     "Stock Entry Detail-custom_weight_uom",
                     "Sales Order Item-custom_available_qty",
                     "Item Group-custom_rate_kg",
-                    "Item Group-custom_update_item_price"
+                    "Item Group-custom_update_item_price",
+                    "Item-custom_theoretical_wpu"
             ]
         ]
     ]},
@@ -306,7 +310,11 @@ fixtures = [
                     "Stock Entry Detail-basic_rate-allow_on_submit",
                     "Stock Entry Detail-additional_cost-allow_on_submit",
                     "Stock Entry Detail-is_scrap_item-allow_on_submit",
-                    "Stock Entry Detail-is_finished_item-allow_on_submit"
+                    "Stock Entry Detail-is_finished_item-allow_on_submit",
+                    "Delivery Note Item-base_amount-permlevel",
+                    "Delivery Note Item-base_rate-permlevel",
+                    "Delivery Note Item-amount-permlevel",
+                    "Delivery Note Item-rate-permlevel"
                 ]
             ]
         ]

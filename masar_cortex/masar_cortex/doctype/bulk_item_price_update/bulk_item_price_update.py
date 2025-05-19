@@ -49,7 +49,7 @@ class BulkItemPriceUpdate(Document):
                 ti.brand,
                 tip.price_list,
                 ti.stock_uom,
-                ti.weight_per_unit,
+                ti.custom_theoretical_wpu,
                 tip.name AS item_price_ref
             FROM tabItem ti
             LEFT JOIN (
@@ -72,7 +72,7 @@ class BulkItemPriceUpdate(Document):
                     "item_code": item.item_code,
                     "item_name": item.item_name,
                     "item_group": item.item_group,
-                    "weight_per_unit": item.weight_per_unit or 0,
+                    "weight_per_unit": item.custom_theoretical_wpu or 0,
                     "rate_per_kg": self.default_rate_per_kg or 0,
                     "old_price": item.price_list_rate or 0,
                     "brand": item.brand,
