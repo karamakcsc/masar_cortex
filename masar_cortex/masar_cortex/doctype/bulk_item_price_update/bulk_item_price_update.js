@@ -2,16 +2,18 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Bulk Item Price Update", {
-	validate: function(frm) {
+	calculate_new_rate: function(frm) {
         if (frm.doc.items.length > 0) {
             frm.doc.items.forEach(function(item) {
                 if (item.weight_per_unit) {
                     item.new_price = item.rate_per_kg * item.weight_per_unit;
-                } else {
-                    frappe.throw("Weight per unit is required for all items.");
-                }
+                } //else {
+                //     frappe.throw("Weight per unit is required for all items.");
+                // }
             });
             frm.refresh_field('items');
+        } else {
+            frappe.throw("Please get items first.")
         }
 	},
 });

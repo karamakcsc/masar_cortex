@@ -63,7 +63,7 @@ class BulkItemPriceUpdate(Document):
                 ) latest_ip ON ip.item_code = latest_ip.item_code AND ip.modified = latest_ip.latest_modified
                 WHERE ip.selling = 1
             ) tip ON tip.item_code = ti.name
-            WHERE {conditions}
+            WHERE {conditions} AND ti.has_variants = 0
         """, as_dict=True)
         
         if items_sql:
