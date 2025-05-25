@@ -271,7 +271,9 @@ fixtures = [
                     "Sales Order Item-custom_available_qty",
                     "Item Group-custom_rate_kg",
                     "Item Group-custom_update_item_price",
-                    "Item-custom_theoretical_wpu"
+                    "Item-custom_theoretical_wpu",
+                    "Delivery Note-custom_gate_pass",
+                    "Delivery Note-custom_drivers"
             ]
         ]
     ]},

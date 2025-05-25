@@ -13,6 +13,7 @@
   "price_list",
   "uom",
   "column_break_anor",
+  "wpu",
   "weight_per_unit",
   "rate_per_kg",
   "old_price",
@@ -79,6 +80,7 @@
    "read_only": 1
   },
   {
+   "columns": 1,
    "fieldname": "new_price",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -106,12 +108,20 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Rate Per Kg"
+  },
+  {
+   "columns": 1,
+   "fieldname": "wpu",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Weight Per Unit",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-18 15:48:16.788017",
+ "modified": "2025-05-25 12:24:54.915838",
  "modified_by": "Administrator",
  "module": "Masar Cortex",
  "name": "Bulk Item Price Item",

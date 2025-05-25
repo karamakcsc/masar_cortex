@@ -6,16 +6,23 @@ frappe.ui.form.on("Bulk Item Price Update", {
         if (frm.doc.items.length > 0) {
             frm.doc.items.forEach(function(item) {
                 if (item.weight_per_unit) {
-                    item.new_price = item.rate_per_kg * item.weight_per_unit;
-                } //else {
-                //     frappe.throw("Weight per unit is required for all items.");
-                // }
+                    new_price = item.rate_per_kg * item.weight_per_unit;
+                    frappe.model.set_value(item.doctype, item.name, 'new_price', new_price);
+                }
             });
             frm.refresh_field('items');
         } else {
             frappe.throw("Please get items first.")
         }
 	},
+    default_rate_per_kg: function(frm) {
+        if (frm.doc.items && frm.doc.items.length > 0) {
+            frm.doc.items.forEach(function(row) {
+                row.rate_per_kg = frm.doc.default_rate_per_kg;
+            });
+            frm.refresh_field("items");
+        }
+    }
 });
 
 frappe.ui.form.on("Bulk Item Price Item", {
