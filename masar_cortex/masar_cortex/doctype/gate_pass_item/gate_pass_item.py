@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class DeliveryNoteGatePass(Document):
+class GatePassItem(Document):
 	pass
