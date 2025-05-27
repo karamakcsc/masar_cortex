@@ -272,6 +272,8 @@ fixtures = [
                     "Item Group-custom_rate_kg",
                     "Item Group-custom_update_item_price",
                     "Item-custom_theoretical_wpu",
+                    "Delivery Note Item-custom_delivered_qty",
+                    "Delivery Note-custom_delivered_qty"
             ]
         ]
     ]},
