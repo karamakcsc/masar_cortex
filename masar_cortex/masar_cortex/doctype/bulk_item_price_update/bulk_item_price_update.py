@@ -49,6 +49,7 @@ class BulkItemPriceUpdate(Document):
                 ti.brand,
                 tip.price_list,
                 ti.stock_uom,
+                (tb.actual_qty - tb.reserved_qty) AS available_qty,
                 ti.weight_per_unit AS wpu,
                 ti.custom_theoretical_wpu,
                 tip.name AS item_price_ref
@@ -64,6 +65,7 @@ class BulkItemPriceUpdate(Document):
                 ) latest_ip ON ip.item_code = latest_ip.item_code AND ip.modified = latest_ip.latest_modified
                 WHERE ip.selling = 1
             ) tip ON tip.item_code = ti.name
+            LEFT JOIN `tabBin` tb ON tb.item_code = ti.name
             WHERE {conditions} AND ti.has_variants = 0
         """, as_dict=True)
         
@@ -80,6 +82,7 @@ class BulkItemPriceUpdate(Document):
                     "brand": item.brand,
                     "price_list": item.price_list or self.default_price_list or '',
                     "uom": item.stock_uom or '',
+                    "available_qty": item.available_qty or 0,
                     "item_price_ref": item.item_price_ref or '',
                 })
 
