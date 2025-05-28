@@ -65,7 +65,7 @@ class BulkItemPriceUpdate(Document):
                 ) latest_ip ON ip.item_code = latest_ip.item_code AND ip.modified = latest_ip.latest_modified
                 WHERE ip.selling = 1
             ) tip ON tip.item_code = ti.name
-            LEFT JOIN `tabBin` tb ON tb.item_code = ti.name
+            LEFT JOIN `tabBin` tb ON tb.item_code = ti.name AND tb.warehouse = 'Finished Goods Store - CKTM'
             WHERE {conditions} AND ti.has_variants = 0
         """, as_dict=True)
         
@@ -152,3 +152,18 @@ class BulkItemPriceUpdate(Document):
                 new_item_price.valid_from = frappe.utils.nowdate()
                 new_item_price.selling = 1
                 new_item_price.save(ignore_permissions=True)
+
+@frappe.whitelist()            
+def available_qty_sql(item):
+    if item:
+        warehouse = 'Finished Goods Store - CKTM'
+        sql = frappe.db.sql("""
+                            SELECT (bi.actual_qty - bi.reserved_qty) AS available_qty 
+                            FROM tabBin bi 
+                            WHERE bi.item_code = %s AND bi.warehouse = %s
+                            """, (item, warehouse, ), as_dict=True)
+        
+        if sql and sql[0] and sql[0]['available_qty']:
+            return sql[0]['available_qty']
+        else:
+            return 0

@@ -8,6 +8,7 @@
  "field_order": [
   "item_code",
   "item_name",
+  "delivery_note_qty",
   "qty",
   "dn_name"
  ],
@@ -28,23 +29,30 @@
    "read_only": 1
   },
   {
-   "fieldname": "qty",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Qty"
-  },
-  {
    "fieldname": "dn_name",
    "fieldtype": "Data",
    "hidden": 1,
    "label": "DN Name",
    "read_only": 1
+  },
+  {
+   "fieldname": "delivery_note_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Delivery Note Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Qty"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-26 16:17:10.625754",
+ "modified": "2025-05-28 13:14:20.620639",
  "modified_by": "Administrator",
  "module": "Masar Cortex",
  "name": "Gate Pass Item",

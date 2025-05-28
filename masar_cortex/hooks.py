@@ -46,7 +46,8 @@ app_license = "mit"
 doctype_js = {
     "Stock Entry" : "custom/stock_entry/stock_entry.js",
     "Sales Order" : "custom/sales_order/sales_order.js",
-    "Item Group" : "custom/item_group/item_group.js"
+    "Item Group" : "custom/item_group/item_group.js",
+    "Delivery Note" : "custom/delivery_note/delivery_note.js"
     }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}

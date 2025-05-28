@@ -29,6 +29,15 @@ frappe.ui.form.on("Bulk Item Price Item", {
 	rate_per_kg: function(frm, cdt, cdn) {
         calcRate(frm, cdn, cdt);
     },
+    validate: function(frm, cdt, cdn){
+        getAvailableQty(frm, cdt, cdn);
+    },
+    onload: function(frm, cdt, cdn){
+        getAvailableQty(frm, cdt, cdn);
+    },
+    refresh: function(frm, cdt, cdn){
+        getAvailableQty(frm, cdt, cdn);
+    }
 });
 
 
@@ -36,4 +45,23 @@ function calcRate(frm, cdn, cdt) {
     var row = locals[cdt][cdn];
     row.new_price = row.rate_per_kg * row.weight_per_unit;
     frm.refresh_field('items');
+}
+
+
+function getAvailableQty(frm, cdt, cdn) {
+    var child = locals[cdt][cdn];
+    if (child.item_code && child.warehouse) {
+        frappe.call({
+            method:"masar_cortex.masar_cortex.doctype.bulk_item_price_update.bulk_item_price_update.available_qty",
+            args: {
+                item: child.item_code,
+            },
+            callback: function(r) {
+                if (r.message) {
+                    console.log(r.message);
+                    frappe.model.set_value(child.doctype, child.name, 'custom_available_qty', r.message);
+                }
+            }
+        })
+    }
 }

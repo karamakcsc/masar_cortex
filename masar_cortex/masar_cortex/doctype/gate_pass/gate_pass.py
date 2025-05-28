@@ -8,8 +8,8 @@ from frappe.model.document import Document
 class GatePass(Document):
 	def validate(self):
 		self.validate_qty()
-		self.validate_driver_details()
 	def on_submit(self):
+		self.validate_driver_details()
 		self.update_delivered_qty()
 	def on_cancel(self):
 		self.return_delivered_qty()

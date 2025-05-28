@@ -42,8 +42,7 @@
    "default": "Today",
    "fieldname": "posting_date",
    "fieldtype": "Date",
-   "label": "Posting Date",
-   "read_only": 1
+   "label": "Posting Date"
   },
   {
    "depends_on": "eval: doc.via_excel == 0",
@@ -127,7 +126,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-05-22 14:59:36.091698",
+ "modified": "2025-05-28 13:21:59.841267",
  "modified_by": "Administrator",
  "module": "Masar Cortex",
  "name": "Bulk Item Price Update",

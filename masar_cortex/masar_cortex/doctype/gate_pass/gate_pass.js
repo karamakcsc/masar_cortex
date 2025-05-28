@@ -20,6 +20,7 @@ function getDnItems(frm) {
                         let row = frm.add_child("dn_items");
                         row.item_code = item.item_code;
                         row.item_name = item.item_name;
+                        row.delivery_note_qty = item.qty;
                         row.qty = item.qty;
                         row.dn_name = item.dn_name;
                     });
