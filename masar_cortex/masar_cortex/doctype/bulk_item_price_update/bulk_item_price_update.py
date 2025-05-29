@@ -10,10 +10,17 @@ from frappe.model.document import Document
 
 class BulkItemPriceUpdate(Document):
     def validate(self):
+        self.validate_date()
         self.fetch_items()
         
     def on_submit(self):
         self.update_item_price()
+        
+        
+    def validate_date(self):
+        if self.posting_date:
+            if self.posting_date != frappe.utils.today():
+                frappe.throw("Posting date must be today.")
 
     def fetch_items(self):
         if self.via_excel:

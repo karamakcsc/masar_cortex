@@ -7,6 +7,8 @@ frappe.ui.form.on('Delivery Note', {
 	}
 });
 
+
+//// sdas
 function createGatePass(frm) {
     if (frm.doc.docstatus === 1) {
         frm.add_custom_button(__("Create Gate Pass"), function() {

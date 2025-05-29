@@ -22,6 +22,19 @@ frappe.ui.form.on("Bulk Item Price Update", {
             });
             frm.refresh_field("items");
         }
+    },
+    onload_post_render: function(frm) {
+        if (frm.is_new()) {
+            frm.doc.items.forEach(function(item) {
+                getAvailableQty(frm, item.doctype, item.name);
+                // if (!item.weight_per_unit || !item.wpu) {
+                //     frappe.db.get_doc('Item', item.item_code).then(item_doc => {
+                //         frappe.model.set_value(item.doctype, item.name, 'weight_per_unit', item_doc.custom_theoretical_wpu || 0);
+                //         frappe.model.set_value(item.doctype, item.name, 'wpu', item_doc.weight_per_unit || 0);
+                //     });
+                // }
+            });
+        }
     }
 });
 
@@ -50,7 +63,7 @@ function calcRate(frm, cdn, cdt) {
 
 function getAvailableQty(frm, cdt, cdn) {
     var child = locals[cdt][cdn];
-    if (child.item_code && child.warehouse) {
+    if (child.item_code) {
         frappe.call({
             method:"masar_cortex.masar_cortex.doctype.bulk_item_price_update.bulk_item_price_update.available_qty",
             args: {

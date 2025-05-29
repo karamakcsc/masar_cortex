@@ -1,5 +1,6 @@
 import frappe
 import json
+from frappe.utils import flt
 from erpnext.stock.doctype.stock_entry.stock_entry import StockEntry
 update_stock_ledger = StockEntry.update_stock_ledger
 make_gl_entries = StockEntry.make_gl_entries
@@ -7,11 +8,27 @@ set_total_incoming_outgoing_value = StockEntry.set_total_incoming_outgoing_value
 
 
 def validate(self, method):
+    set_total_incoming_outgoing_qty(self)
     validate_items(self)
     calc_cost_qty(self)
 
 # def on_submit(self, method):
 #     calc_cost_qty(self)
+
+def set_total_incoming_outgoing_qty(self):
+    if self.stock_entry_type == "Manufacture":
+        self.custom_total_outgoing_qty_kg = self.custom_total_incoming_qty_kg = 0.0
+        qty_in_kg = 0
+        for d in self.get("items"):
+            if d.s_warehouse:
+                self.custom_total_outgoing_qty_kg += flt(d.qty)
+            if d.t_warehouse:
+                doc = frappe.get_doc("Item", d.item_code)
+                wpu = doc.weight_per_unit
+                qty_in_kg = wpu * d.qty
+                self.custom_total_incoming_qty_kg += flt(qty_in_kg)
+        self.custom_total_qty_difference = self.custom_total_incoming_qty_kg - self.custom_total_outgoing_qty_kg
+
 
 def calc_cost_qty(self):
     if self.stock_entry_type == "Slitting":

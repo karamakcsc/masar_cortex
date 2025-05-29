@@ -274,7 +274,13 @@ fixtures = [
                     "Item Group-custom_update_item_price",
                     "Item-custom_theoretical_wpu",
                     "Delivery Note Item-custom_delivered_qty",
-                    "Delivery Note-custom_delivered_qty"
+                    "Delivery Note-custom_delivered_qty",
+                    "Production Plan-custom_remarks",
+                    "Stock Entry-custom_total_qty_difference",
+                    "Stock Entry-custom_total_outgoing_qty_kg",
+                    "Stock Entry-custom_total_incoming_qty_kg",
+                    "Stock Entry-custom_section_break_wgdbv",
+                    "Stock Entry-custom_column_break_r87kr"
             ]
         ]
     ]},
