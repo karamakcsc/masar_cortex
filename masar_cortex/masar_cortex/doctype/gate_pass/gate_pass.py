@@ -43,6 +43,7 @@ class GatePass(Document):
 	def update_delivered_qty(self):
 		if not self.dn_items:
 			frappe.throw("No items to update. Please fetch Delivery Note items first.")
+		de_qty = 0
 		for item in self.dn_items:
 			if item.qty <= 0:
 				frappe.throw(f"Quantity for item {item.item_code} must be greater than zero.")
@@ -53,19 +54,24 @@ class GatePass(Document):
 								Available quantity: {remaining_qty}, Requested quantity: {item.qty}""")
 			
 			new_qty = dn_doc.custom_delivered_qty + item.qty
+			de_qty += item.qty
 			frappe.db.set_value("Delivery Note Item", item.dn_name, "custom_delivered_qty", new_qty)
+		frappe.db.set_value("Delivery Note", self.delivery_note, "custom_delivered_qty", de_qty)
 		frappe.db.commit()
 		frappe.msgprint("Delivered quantities have been updated successfully.", alert=True, indicator='green')
 			
 	def return_delivered_qty(self):
 		if not self.dn_items:
 			frappe.throw("No items to reset. Please fetch Delivery Note items first.")
+		de_qty = 0
 		for item in self.dn_items:
 			dn_doc = frappe.get_doc("Delivery Note Item", item.dn_name)
 			new_qty = dn_doc.custom_delivered_qty - item.qty
 			if new_qty < 0:
 				new_qty = 0
+			de_qty += new_qty
 			frappe.db.set_value("Delivery Note Item", item.dn_name, "custom_delivered_qty", new_qty)
+		frappe.db.set_value("Delivery Note", self.delivery_note, "custom_delivered_qty", de_qty)
 		frappe.db.commit()
 		frappe.msgprint("Delivered quantities have been reset to zero for all items in the Delivery Note.", alert=True, indicator='green')
 

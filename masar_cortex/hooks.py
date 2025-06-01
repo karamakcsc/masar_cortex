@@ -275,7 +275,7 @@ fixtures = [
                     "Item-custom_theoretical_wpu",
                     "Delivery Note Item-custom_delivered_qty",
                     "Delivery Note-custom_delivered_qty",
-                    "Production Plan-custom_remarks",
+                    "Production Plan Item-custom_remarks",
                     "Stock Entry-custom_total_qty_difference",
                     "Stock Entry-custom_total_outgoing_qty_kg",
                     "Stock Entry-custom_total_incoming_qty_kg",

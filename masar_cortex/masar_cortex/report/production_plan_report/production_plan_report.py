@@ -13,9 +13,9 @@ def data(filters):
         SELECT
 			tpp.name AS `Production Plan #`, 
 			tpp.company AS `Company`,
-			tpp.remarks AS `Remarks`,
 			CASE WHEN tpp.status = 'Submitted' THEN 'Not Started' ELSE tpp.status END AS `Status`,
 			tppi.item_code AS `Item Code`,
+			tppi.custom_remarks AS `Remarks`,
 			tppi.planned_qty AS `Planned Qty`,
 			IFNULL(two.planned_start_date, tppi.planned_start_date) AS `Planned Start Date`,
 			two.actual_start_date AS `Actual Start Date`,
@@ -32,9 +32,9 @@ def columns():
     return[
          "Production Plan #:Link/Production Plan:300",
          "Company:Link/Company:300",
-         "Remarks:Data:200",
          "Status:Data:200",
          "Item Code:Link/Item:200",
+         "Remarks:Data:200",
          "Planned Qty:Float:200",
          "Planned Start Date:Date:300",
          "Actual Start Date:Date:300",

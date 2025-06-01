@@ -12,6 +12,7 @@ class BulkItemPriceUpdate(Document):
     def validate(self):
         self.validate_date()
         self.fetch_items()
+        self.set_available_qty()
         
     def on_submit(self):
         self.update_item_price()
@@ -22,6 +23,12 @@ class BulkItemPriceUpdate(Document):
             if self.posting_date != frappe.utils.today():
                 frappe.throw("Posting date must be today.")
 
+    def set_available_qty(self):
+        if self.items:
+            for item in self.items:
+                available_qty = available_qty_sql(item.item_code)
+                item.available_qty = available_qty if available_qty else 0
+    
     def fetch_items(self):
         if self.via_excel:
             return
@@ -160,17 +167,16 @@ class BulkItemPriceUpdate(Document):
                 new_item_price.selling = 1
                 new_item_price.save(ignore_permissions=True)
 
-@frappe.whitelist()            
+@frappe.whitelist()
 def available_qty_sql(item):
     if item:
         warehouse = 'Finished Goods Store - CKTM'
         sql = frappe.db.sql("""
-                            SELECT (bi.actual_qty - bi.reserved_qty) AS available_qty 
-                            FROM tabBin bi 
-                            WHERE bi.item_code = %s AND bi.warehouse = %s
-                            """, (item, warehouse, ), as_dict=True)
-        
-        if sql and sql[0] and sql[0]['available_qty']:
+            SELECT (COALESCE(bi.actual_qty, 0) - COALESCE(bi.reserved_qty, 0)) AS available_qty
+            FROM tabBin bi
+            WHERE bi.item_code = %s AND bi.warehouse = %s
+        """, (item, warehouse), as_dict=True)
+        if sql and sql[0] and sql[0]['available_qty'] is not None:
             return sql[0]['available_qty']
         else:
             return 0
