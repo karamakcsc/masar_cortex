@@ -2,6 +2,7 @@ import frappe
 
 
 def validate(self, method):
+    # pass
     validate_actual_qty(self)
 
         
