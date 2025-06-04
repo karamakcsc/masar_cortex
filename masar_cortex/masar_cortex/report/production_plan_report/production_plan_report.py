@@ -11,9 +11,9 @@ def execute(filters=None):
 def data(filters):
     conditions = " 1=1 "
     if filters.get("p_plan"):
-        conditions += f" AND tpp.name = '{filters.get("p_plan")}'"
+        conditions += f" AND tpp.name = '{filters.get('p_plan')}'"
     if filters.get("item_code"):
-        conditions += f" AND tppi.item_code = '{filters.get("item_code")}'"
+        conditions += f" AND tppi.item_code = '{filters.get('item_code')}'"
     
     sql = frappe.db.sql(f"""
         SELECT
