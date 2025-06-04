@@ -14,15 +14,20 @@ def data(filters):
         conditions += f" AND tpp.name = '{filters.get('p_plan')}'"
     if filters.get("item_code"):
         conditions += f" AND tppi.item_code = '{filters.get('item_code')}'"
+    _from, to = filters.get("from"), filters.get("to")
+    if _from and to:
+        conditions += f" AND tpp.posting_date BETWEEN '{_from}' AND '{to}'"
     
     sql = frappe.db.sql(f"""
         SELECT
 			tpp.name AS `Production Plan #`, 
-			tpp.company AS `Company`,
+			tpp.posting_date AS `Posting Date`,
 			CASE WHEN tpp.status = 'Submitted' THEN 'Not Started' ELSE tpp.status END AS `Status`,
+            tpp.total_planned_qty AS `Total Planned Qty`,
 			tppi.item_code AS `Item Code`,
 			tppi.custom_remarks AS `Remarks`,
 			tppi.planned_qty AS `Planned Qty`,
+            tppi.pending_qty AS `Pending Qty`,
 			IFNULL(two.planned_start_date, tppi.planned_start_date) AS `Planned Start Date`,
 			two.actual_start_date AS `Actual Start Date`,
 			two.actual_end_date AS `Actual End Date`
@@ -36,14 +41,16 @@ def data(filters):
 
 def columns():
     return[
-         "Production Plan #:Link/Production Plan:300",
-         "Company:Link/Company:300",
-         "Status:Data:200",
+         "Production Plan #:Link/Production Plan:250",
+         "Posting Date:Date:200",
+         "Status:Data:150",
+         "Total Planned Qty:Float:200",
          "Item Code:Link/Item:200",
          "Remarks:Data:200",
-         "Planned Qty:Float:200",
-         "Planned Start Date:Date:300",
-         "Actual Start Date:Date:300",
-         "Actual End Date:Date:300",
+         "Planned Qty:Float:150",
+         "Pending Qty:Float:150",
+         "Planned Start Date:Date:200",
+         "Actual Start Date:Date:200",
+         "Actual End Date:Date:200",
          
 	]

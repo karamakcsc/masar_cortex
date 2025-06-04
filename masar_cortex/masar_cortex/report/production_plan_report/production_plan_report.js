@@ -14,6 +14,16 @@ frappe.query_reports["Production Plan Report"] = {
 			"label": "Item Code",
 			"fieldtype": "Link",
 			"options": "Item"
+		},
+		{
+			"fieldname": "from",
+			"label": "From Date",
+			"fieldtype": "Date"
+		},
+		{
+			"fieldname": "to",
+			"label": "To Date",
+			"fieldtype": "Date"
 		}
 	]
 };
