@@ -9,7 +9,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letterhead": null,
- "modified": "2025-05-29 13:12:06.373450",
+ "modified": "2025-06-03 12:17:23.356487",
  "modified_by": "Administrator",
  "module": "Masar Cortex",
  "name": "Production Plan Report",
@@ -18,6 +18,31 @@
  "ref_doctype": "Production Plan",
  "report_name": "Production Plan Report",
  "report_type": "Script Report",
- "roles": [],
+ "roles": [
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "General Manager"
+  },
+  {
+   "role": "Manufacturing User"
+  },
+  {
+   "role": "Manufacturing Manager"
+  },
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "Stock Manager"
+  }
+ ],
  "timeout": 0
 }

@@ -9,7 +9,13 @@ def execute(filters=None):
 
 
 def data(filters):
-    sql = frappe.db.sql("""
+    conditions = " 1=1 "
+    if filters.get("p_plan"):
+        conditions += f" AND tpp.name = '{filters.get("p_plan")}'"
+    if filters.get("item_code"):
+        conditions += f" AND tppi.item_code = '{filters.get("item_code")}'"
+    
+    sql = frappe.db.sql(f"""
         SELECT
 			tpp.name AS `Production Plan #`, 
 			tpp.company AS `Company`,
@@ -23,7 +29,7 @@ def data(filters):
 		FROM `tabProduction Plan` tpp
 		INNER JOIN `tabProduction Plan Item` tppi  ON tppi.parent = tpp.name 
 		LEFT JOIN `tabWork Order` two  ON tpp.name = two.production_plan AND tppi.name = two.production_plan_item AND two.docstatus = 1
-		WHERE tpp.docstatus = 1 
+		WHERE {conditions} AND tpp.docstatus = 1 
 	""")
     
     return sql
