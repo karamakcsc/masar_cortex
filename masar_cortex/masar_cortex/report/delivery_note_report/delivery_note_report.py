@@ -28,10 +28,11 @@ def data(filters):
 			tdn.custom_delivered_qty AS `Total DN Delivered Qty`,
 			(tdn.total_qty - tdn.custom_delivered_qty) AS `Total Remaining Qty`,
 			tdni.item_code AS `Item Code`,
-			tdni.rate AS `Rate`,
+			tdni.rate AS `Price`,
 			tdni.qty AS `Qty`,
 			tdni.custom_delivered_qty AS `Item Delivered Qty`,
-			(tdni.qty - tdni.custom_delivered_qty) AS `Item Remaining Qty` 
+			(tdni.qty - tdni.custom_delivered_qty) AS `Item Remaining Qty`,
+			((tdni.qty - tdni.custom_delivered_qty) * tdni.rate) AS `Item Remaining Amount`
 		FROM `tabDelivery Note` tdn 
 		INNER JOIN `tabDelivery Note Item` tdni ON tdn.name = tdni.parent
 		WHERE {conditions} AND tdn.docstatus = 1
@@ -44,13 +45,14 @@ def columns():
     return [
 		"Delievry Note #:Link/Delivery Note:200",
 		"Customer:Link/Customer:200",
-		"Posting Date:Date:200",
-		"Total DN Qty:Float:200",
+		"Posting Date:Date:150",
+		"Total DN Qty:Float:150",
 		"Total DN Delivered Qty:Float:200",
 		"Total Remaining Qty:Float:200",
 		"Item Code:Link/Item:200",
-		"Rate:Currency:125",
+		"Price:Currency:125",
 		"Qty:Float:125",
-		"Item Delivered Qty:Float:200",
-		"Item Remaining Qty:Float:200",
+		"Item Delivered Qty:Float:175",
+		"Item Remaining Qty:Float:175",
+		"Item Remaining Amount:Currency:200",
 	]
