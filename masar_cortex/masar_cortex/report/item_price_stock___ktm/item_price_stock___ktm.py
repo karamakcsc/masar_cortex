@@ -58,47 +58,50 @@ def get_data(filters, columns):
 
 
 def get_item_price_qty_data(filters):
-	query = """
-		SELECT
-			tip.item_code,
-			ti.item_name,
-			ti.item_group,
-			ti.weight_per_unit,
-			ti.custom_theoretical_wpu,
-			tb.warehouse,
-			(tb.actual_qty - tb.reserved_qty) AS available_qty,
-			tbi.rate_per_kg,
-			tip.price_list,
-			tip.price_list_rate
-		FROM `tabItem Price` tip
-		INNER JOIN (
-			SELECT MAX(name) AS max_name, item_code, MAX(valid_from) AS max_valid_from
-			FROM `tabItem Price`
-			WHERE selling = 1
-			GROUP BY item_code
-		) latest_tip
-			ON tip.item_code = latest_tip.item_code
-			AND tip.valid_from = latest_tip.max_valid_from
-			AND tip.name = latest_tip.max_name
-		INNER JOIN `tabItem` ti ON tip.item_code = ti.item_code
-		LEFT JOIN `tabBin` tb ON tip.item_code = tb.item_code
-		LEFT JOIN (
-			SELECT DISTINCT
-				item_code,
-				item_price_ref,
-				rate_per_kg,
-				docstatus
-			FROM `tabBulk Item Price Item`
-			ORDER BY item_code, item_price_ref, rate_per_kg DESC
-		) tbi
-			ON tip.name = tbi.item_price_ref AND tip.item_code = tbi.item_code AND tbi.docstatus = 1
-		WHERE (tb.actual_qty - tb.reserved_qty) > 0
-	"""
-
+	conditions = " 1=1 "
 	if filters.get("item_code"):
-		query += f" AND tip.item_code = '{filters.get('item_code')}'"
+		conditions += f" AND pl.item_code = '{filters.get('item_code')}'"
 	if filters.get("warehouse"):
-		query += f" AND tb.warehouse = '{filters.get('warehouse')}'"
+		conditions += f" AND b.warehouse = '{filters.get('warehouse')}'"
+	query = f"""
+			with price_list AS ( SELECT 
+				MAX(modified), 
+				ip.item_code , 
+				ip.price_list,
+				ip.price_list_rate
+			FROM `tabItem Price` ip 
+			WHERE ip.selling = 1
+			GROUP BY ip.item_code ) , 
+			item AS (SELECT  
+				item_code , 
+				item_name , 
+				item_group , 
+				weight_per_unit , 
+				custom_theoretical_wpu 
+			FROM tabItem i 
+			), 
+			bin AS (
+				SELECT item_code , warehouse  , 
+				(actual_qty  - reserved_qty) AS available_qty 
+				FROM tabBin tb 
+				HAVING available_qty > 0 
+			) , 
+			by_kg AS (
+			SELECT MAX(modified) , item_code , rate_per_kg FROM 
+			`tabBulk Item Price Item` tbipi
+			WHERE docstatus = 1
+			GROUP BY item_code 
+			)
+			SELECT 
+				pl.item_code , i.item_name , i.item_group , 
+				i.weight_per_unit , i.custom_theoretical_wpu , 
+				b.warehouse ,  b.available_qty , kg.rate_per_kg , pl.price_list , pl.price_list_rate
+			FROM price_list pl
+			INNER JOIN item  i ON pl.item_code = i.item_code 
+			INNER JOIN bin b ON b.item_code = pl.item_code
+			INNER JOIN by_kg kg ON  pl.item_code = kg.item_code
+			WHERE {conditions}
+	"""
 
 	item_results = frappe.db.sql(query, as_dict=True)
 
