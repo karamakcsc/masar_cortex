@@ -14,6 +14,7 @@ frappe.query_reports["Item Price Stock - KTM"] = {
 			label: __("Warehouse"),
 			fieldtype: "Link",
 			options: "Warehouse",
+			default: "Finished Goods Store - CKTM"
 		},
 	]
 };

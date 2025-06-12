@@ -38,6 +38,7 @@ def get_columns():
 			"options": "Warehouse",
 			"width": 120,
 		},
+		{"label": _("Rate Per Kg"), "fieldname": "rate_per_kg", "fieldtype": "Float", "width": 120},
 		{
 			"label": _("Available Qty"),
 			"fieldname": "available_qty",
@@ -57,89 +58,68 @@ def get_data(filters, columns):
 
 
 def get_item_price_qty_data(filters):
-	item_price = frappe.qb.DocType("Item Price")
-	bin = frappe.qb.DocType("Bin")
-	item = frappe.qb.DocType("Item")
-
-	query = (
-		frappe.qb.from_(item_price)
-		.inner_join(item)
-		.on(item_price.item_code == item.item_code)
-		.left_join(bin)
-		.on(item_price.item_code == bin.item_code)
-		.select(
-			item_price.item_code,
-			item_price.item_name,
-			item.item_group,
-			item.weight_per_unit,
-			item.custom_theoretical_wpu,
-			item_price.name.as_("price_list_name"),
-			bin.warehouse.as_("warehouse"),
-			(bin.actual_qty - bin.reserved_qty).as_("available_qty"),
-		)
-		.where((bin.actual_qty - bin.reserved_qty) > 0)
-	)
+	query = """
+		SELECT
+			tip.item_code,
+			ti.item_name,
+			ti.item_group,
+			ti.weight_per_unit,
+			ti.custom_theoretical_wpu,
+			tb.warehouse,
+			(tb.actual_qty - tb.reserved_qty) AS available_qty,
+			tbi.rate_per_kg,
+			tip.price_list,
+			tip.price_list_rate
+		FROM `tabItem Price` tip
+		INNER JOIN (
+			SELECT MAX(name) AS max_name, item_code, MAX(valid_from) AS max_valid_from
+			FROM `tabItem Price`
+			WHERE selling = 1
+			GROUP BY item_code
+		) latest_tip
+			ON tip.item_code = latest_tip.item_code
+			AND tip.valid_from = latest_tip.max_valid_from
+			AND tip.name = latest_tip.max_name
+		INNER JOIN `tabItem` ti ON tip.item_code = ti.item_code
+		LEFT JOIN `tabBin` tb ON tip.item_code = tb.item_code
+		LEFT JOIN (
+			SELECT DISTINCT
+				item_code,
+				item_price_ref,
+				rate_per_kg,
+				docstatus
+			FROM `tabBulk Item Price Item`
+			ORDER BY item_code, item_price_ref, rate_per_kg DESC
+		) tbi
+			ON tip.name = tbi.item_price_ref AND tip.item_code = tbi.item_code AND tbi.docstatus = 1
+		WHERE (tb.actual_qty - tb.reserved_qty) > 0
+	"""
 
 	if filters.get("item_code"):
-		query = query.where(item_price.item_code == filters.get("item_code"))
+		query += f" AND tip.item_code = '{filters.get('item_code')}'"
 	if filters.get("warehouse"):
-		query = query.where(bin.warehouse == filters.get("warehouse"))
+		query += f" AND tb.warehouse = '{filters.get('warehouse')}'"
 
-	item_results = query.run(as_dict=True)
-
-	price_list_names = list(set(item.price_list_name for item in item_results))
-
-	selling_price_map = get_price_map(price_list_names, selling=1)
+	item_results = frappe.db.sql(query, as_dict=True)
 
 	result = []
-	if item_results:
-		for item_dict in item_results:
-			data = {
-				"item_code": item_dict.item_code,
-				"item_name": item_dict.item_name,
-				"item_group": item_dict.item_group,
-				"wpu": item_dict.weight_per_unit,
-				"theoretical_wpu": item_dict.custom_theoretical_wpu,
-				"warehouse": item_dict.warehouse,
-				"available_qty": item_dict.available_qty or 0,
-				"selling_price_list": "",
-				"selling_rate": 0.0,
-				"total_amount": 0.0,
-				"total_weight": (item_dict.available_qty or 0) * item_dict.custom_theoretical_wpu
-			}
+	for item_dict in item_results:
+		available_qty = item_dict.available_qty or 0
+		theoretical_wpu = item_dict.custom_theoretical_wpu or 0
+		price = item_dict.price_list_rate or 0
 
-			price_list = item_dict["price_list_name"]
-			if selling_price_map.get(price_list):
-				data["selling_price_list"] = selling_price_map.get(price_list)["Selling Price List"] or ""
-				data["selling_rate"] = selling_price_map.get(price_list)["Selling Rate"] or 0
-				data["total_amount"] = data["selling_rate"] * data["available_qty"]
-
-			result.append(data)
+		result.append({
+			"item_code": item_dict.item_code,
+			"item_name": item_dict.item_name,
+			"item_group": item_dict.item_group,
+			"wpu": item_dict.weight_per_unit,
+			"theoretical_wpu": theoretical_wpu,
+			"warehouse": item_dict.warehouse,
+			"available_qty": available_qty,
+			"rate_per_kg": item_dict.rate_per_kg,
+			"selling_rate": price,
+			"total_amount": available_qty * price,
+			"total_weight": available_qty * theoretical_wpu,
+		})
 
 	return result
-
-
-def get_price_map(price_list_names, buying=0, selling=0):
-	price_map = {}
-
-	if not price_list_names:
-		return price_map
-
-	rate_key = "Buying Rate" if buying else "Selling Rate"
-	price_list_key = "Buying Price List" if buying else "Selling Price List"
-
-	filters = {"name": ("in", price_list_names)}
-	if buying:
-		filters["buying"] = 1
-	else:
-		filters["selling"] = 1
-
-	pricing_details = frappe.get_all(
-		"Item Price", fields=["name", "price_list", "price_list_rate"], filters=filters
-	)
-
-	for d in pricing_details:
-		name = d["name"]
-		price_map[name] = {price_list_key: d["price_list"], rate_key: d["price_list_rate"]}
-
-	return price_map
