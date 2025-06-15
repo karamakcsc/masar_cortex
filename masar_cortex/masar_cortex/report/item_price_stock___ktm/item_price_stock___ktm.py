@@ -64,13 +64,17 @@ def get_item_price_qty_data(filters):
 	if filters.get("warehouse"):
 		conditions += f" AND b.warehouse = '{filters.get('warehouse')}'"
 	query = f"""
-			with price_list AS ( SELECT 
-				MAX(modified), 
+			WITH price_list AS ( SELECT 
 				ip.item_code , 
 				ip.price_list,
 				ip.price_list_rate
 			FROM `tabItem Price` ip 
 			WHERE ip.selling = 1
+			AND ip.modified = (
+                SELECT MAX(modified)
+                FROM `tabItem Price` ip2
+                WHERE ip2.item_code = ip.item_code AND ip2.selling = 1
+            )
 			GROUP BY ip.item_code ) , 
 			item AS (SELECT  
 				item_code , 
