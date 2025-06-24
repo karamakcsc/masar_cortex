@@ -91,9 +91,14 @@ def get_item_price_qty_data(filters):
 				HAVING available_qty > 0 
 			) , 
 			by_kg AS (
-			SELECT MAX(modified) , item_code , rate_per_kg FROM 
+			SELECT item_code , rate_per_kg FROM 
 			`tabBulk Item Price Item` tbipi
 			WHERE docstatus = 1
+			AND tbipi.modified = (
+                SELECT MAX(modified)
+                FROM `tabBulk Item Price Item` tbipi2
+                WHERE tbipi2.item_code = tbipi.item_code
+            )
 			GROUP BY item_code 
 			)
 			SELECT 
