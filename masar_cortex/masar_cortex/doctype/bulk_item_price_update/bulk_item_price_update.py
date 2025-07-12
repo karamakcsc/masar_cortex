@@ -10,18 +10,12 @@ from frappe.model.document import Document
 
 class BulkItemPriceUpdate(Document):
     def validate(self):
-        self.validate_date()
         self.fetch_items()
         self.set_available_qty()
         
     def on_submit(self):
         self.update_item_price()
         
-        
-    def validate_date(self):
-        if self.posting_date:
-            if self.posting_date != frappe.utils.today():
-                frappe.throw("Posting date must be today.")
 
     def set_available_qty(self):
         if self.items:
@@ -113,9 +107,15 @@ class BulkItemPriceUpdate(Document):
                     frappe.throw(f"Item {item.item_code} in row {item.idx} is missing rate per kg.")
                 if not item.new_price:
                     frappe.throw(f"Item {item.item_code} in row {item.idx} is missing new price.")
-                if item.item_price_ref and item.new_price:
+                existing_price = frappe.db.sql("""
+                    SELECT name FROM `tabItem Price`
+                    WHERE item_code = %s AND uom = %s AND price_list = %s AND selling = 1
+                    ORDER BY modified DESC LIMIT 1
+                """, (item.item_code, item.uom, item.price_list), as_dict=True)
+                existing_price = existing_price[0]['name'] if existing_price else None
+                if existing_price:
                     # frappe.db.set_value("Item Price", item.item_price_ref, "price_list_rate", item.new_price)
-                    item_price_doc = frappe.get_doc("Item Price", item.item_price_ref)
+                    item_price_doc = frappe.get_doc("Item Price", existing_price)
                     item_price_doc.price_list_rate = item.new_price
                     item_price_doc.save(ignore_permissions=True)
                 elif not item.old_price and item.new_price:
@@ -170,7 +170,7 @@ class BulkItemPriceUpdate(Document):
 @frappe.whitelist()
 def available_qty_sql(item):
     if item:
-        warehouse = 'Finished Goods Store - CKTM'
+        warehouse = 'Finished Goods Store - MSCD'
         sql = frappe.db.sql("""
             SELECT (COALESCE(bi.actual_qty, 0) - COALESCE(bi.reserved_qty, 0)) AS available_qty
             FROM tabBin bi

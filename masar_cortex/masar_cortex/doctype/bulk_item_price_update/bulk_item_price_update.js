@@ -60,6 +60,7 @@ function getAvailableQty(frm, cdt, cdn) {
                 if (r.message) {
                     console.log(r.message);
                     frappe.model.set_value(child.doctype, child.name, 'available_qty', r.message);
+                    frm.refresh_field('items');
                 }
             }
         })
