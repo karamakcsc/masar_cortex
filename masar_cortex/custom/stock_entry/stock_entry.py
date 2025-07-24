@@ -8,12 +8,20 @@ set_total_incoming_outgoing_value = StockEntry.set_total_incoming_outgoing_value
 
 
 def validate(self, method):
+    validate_warehouse(self)
     set_total_incoming_outgoing_qty(self)
     validate_items(self)
     calc_cost_qty(self)
 
 # def on_submit(self, method):
 #     calc_cost_qty(self)
+
+def validate_warehouse(self):
+    if self.stock_entry_type in ["Manufacture", "Slitting"]:
+        for item in self.items:
+            if item.s_warehouse:
+                if "Work In Progress" not in item.s_warehouse:
+                    frappe.throw(f"Source Warehouse {item.s_warehouse} must contain 'Work In Progress' for Manufacture or Slitting Stock Entry.")
 
 def set_total_incoming_outgoing_qty(self):
     if self.stock_entry_type == "Manufacture":
@@ -127,10 +135,10 @@ def recalculate_costs(self):
         #### Loop For Scrap, Finished Checkbox ####
         
         for item in self.get('items'):
-            if item.get('t_warehouse') == 'Semi-Finished Goods Store - CKTM':
+            if item.get('t_warehouse') in 'Semi-Finished Goods Store':
                 frappe.db.set_value(item['doctype'], item['name'], "is_finished_item", 1)
                 item['is_finished_item'] = 1
-            if item.get('t_warehouse') == 'Scrap Store - CKTM':
+            if item.get('t_warehouse') in 'Scrap Store':
                 frappe.db.set_value(item['doctype'], item['name'], "is_scrap_item", 1)
                 item['is_scrap_item'] = 1
         

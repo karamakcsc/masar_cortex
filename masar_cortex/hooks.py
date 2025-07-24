@@ -323,7 +323,8 @@ fixtures = [
                     "Delivery Note Item-base_amount-permlevel",
                     "Delivery Note Item-base_rate-permlevel",
                     "Delivery Note Item-amount-permlevel",
-                    "Delivery Note Item-rate-permlevel"
+                    "Delivery Note Item-rate-permlevel",
+                    "Sales Order Item-rate-read_only_depends_on"
                 ]
             ]
         ]
