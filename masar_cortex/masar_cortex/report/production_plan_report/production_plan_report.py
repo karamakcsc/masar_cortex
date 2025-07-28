@@ -38,12 +38,12 @@ def data(filters):
             tppi.produced_qty AS `Produced Qty`,
             tppi.pending_qty AS `Pending Qty`,
             (IFNULL(two.produced_qty, 0) * IFNULL(ti.weight_per_unit, 0)) AS `Production Qty in Kg`,
+            tsei.scrap_qty AS `Scrap Qty`,
+            tsei.scrap_item AS `Scrap Item`,
             (IFNULL(two.process_loss_qty, 0) * IFNULL(ti.weight_per_unit, 0)) AS `Scrap in Kg`,
             IFNULL(two.planned_start_date, tppi.planned_start_date) AS `Planned Start Date`,
             two.actual_start_date AS `Actual Start Date`,
-            two.actual_end_date AS `Actual End Date`,
-            tsei.scrap_qty AS `Scrap Qty`,
-            tsei.scrap_item AS `Scrap Item`
+            two.actual_end_date AS `Actual End Date`
         FROM `tabProduction Plan` tpp
         INNER JOIN `tabProduction Plan Item` tppi  
             ON tppi.parent = tpp.name 
