@@ -87,6 +87,8 @@ def columns():
          "Produced Qty:Float:150",
          "Pending Qty:Float:150",
          "Production Qty in Kg:Float:200",
+         "Scrap Qty:Float:150",
+         "Scrap Item:Link/Item:200",
          "Scrap in Kg:Float:200",
          "Planned Start Date:Date:200",
          "Actual Start Date:Date:200",
