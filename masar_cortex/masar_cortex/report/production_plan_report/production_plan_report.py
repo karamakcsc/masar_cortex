@@ -22,8 +22,14 @@ def data(filters):
         SELECT
             tpp.name AS `Production Plan #`, 
             tpp.posting_date AS `Posting Date`,
-            CASE WHEN tpp.status = 'Submitted' THEN 'Not Started' ELSE tpp.status END AS `Productio Plan Status`,
-            CASE WHEN two.status = 'Draft' THEN 'Not Started' ELSE two.status END AS `Work Order Status`,
+            CASE 
+                WHEN tpp.status = 'Submitted' THEN 'Not Started' 
+                ELSE tpp.status 
+            END AS `Production Plan Status`,
+            CASE 
+                WHEN two.status = 'Draft' OR two.status IS NULL THEN 'Not Started' 
+                ELSE two.status 
+            END AS `Work Order Status`,
             tpp.total_planned_qty AS `Total Planned Qty`,
             tpp.total_produced_qty AS `Total Produced Qty`,
             tppi.item_code AS `Item Code`,
@@ -35,12 +41,34 @@ def data(filters):
             (IFNULL(two.process_loss_qty, 0) * IFNULL(ti.weight_per_unit, 0)) AS `Scrap in Kg`,
             IFNULL(two.planned_start_date, tppi.planned_start_date) AS `Planned Start Date`,
             two.actual_start_date AS `Actual Start Date`,
-            two.actual_end_date AS `Actual End Date`
+            two.actual_end_date AS `Actual End Date`,
+            tsei.scrap_qty AS `Scrap Qty`,
+            tsei.scrap_item AS `Scrap Item`
         FROM `tabProduction Plan` tpp
-        INNER JOIN `tabProduction Plan Item` tppi  ON tppi.parent = tpp.name 
-        LEFT JOIN `tabWork Order` two  ON tpp.name = two.production_plan AND tppi.name = two.production_plan_item AND two.docstatus IN (0, 1)
-        LEFT JOIN `tabItem` ti ON ti.name = tppi.item_code
-        WHERE {conditions} AND tpp.docstatus = 1 
+        INNER JOIN `tabProduction Plan Item` tppi  
+            ON tppi.parent = tpp.name 
+        LEFT JOIN `tabWork Order` two  
+            ON tpp.name = two.production_plan 
+            AND tppi.name = two.production_plan_item 
+            AND two.docstatus IN (0, 1)
+        LEFT JOIN `tabItem` ti 
+            ON ti.name = tppi.item_code
+        LEFT JOIN (
+            SELECT
+                parent AS stock_entry,
+                SUM(qty) AS scrap_qty,
+                MAX(item_code) AS scrap_item
+            FROM `tabStock Entry Detail`
+            WHERE is_scrap_item = 1
+            GROUP BY parent
+        ) tsei ON tsei.stock_entry = (
+            SELECT name 
+            FROM `tabStock Entry` 
+            WHERE work_order = two.name 
+            ORDER BY creation DESC 
+            LIMIT 1
+        )
+        WHERE {conditions} AND tpp.docstatus = 1
 	""")
     
     return sql

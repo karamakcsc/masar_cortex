@@ -156,6 +156,9 @@ doc_events = {
     "Sales Order": {
         "validate": "masar_cortex.custom.sales_order.sales_order.validate",
     },
+    "Production Plan": {
+        "validate": "masar_cortex.custom.production_plan.production_plan.validate"
+    }
 }
 
 # Scheduled Tasks
@@ -280,7 +283,9 @@ fixtures = [
                     "Stock Entry-custom_total_outgoing_qty_kg",
                     "Stock Entry-custom_total_incoming_qty_kg",
                     "Stock Entry-custom_section_break_wgdbv",
-                    "Stock Entry-custom_column_break_r87kr"
+                    "Stock Entry-custom_column_break_r87kr",
+                    "Production Plan Item-custom_available_raw_materials",
+                    "Production Plan Item-custom_required_raw_materials"
             ]
         ]
     ]},

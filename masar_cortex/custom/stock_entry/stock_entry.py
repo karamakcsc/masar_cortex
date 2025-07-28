@@ -24,7 +24,7 @@ def validate_warehouse(self):
                     frappe.throw(f"Source Warehouse {item.s_warehouse} must contain 'Work In Progress' for Manufacture or Slitting Stock Entry.")
 
 def set_total_incoming_outgoing_qty(self):
-    if self.stock_entry_type == "Manufacture":
+    if self.stock_entry_type in ["Manufacture", "Slitting"]:
         self.custom_total_outgoing_qty_kg = self.custom_total_incoming_qty_kg = 0.0
         qty_in_kg = 0
         for d in self.get("items"):
