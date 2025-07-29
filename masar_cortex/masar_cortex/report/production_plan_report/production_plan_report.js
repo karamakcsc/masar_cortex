@@ -24,6 +24,18 @@ frappe.query_reports["Production Plan Report"] = {
 			"fieldname": "to",
 			"label": "To Date",
 			"fieldtype": "Date"
+		},
+		{
+			"fieldname": "pp_status",
+			"label": "Production Plan Status",
+			"fieldtype": "Select",
+			"options": "\nDraft\nSubmitted\nNot Started\nIn Process\nCompleted\nClosed\nCancelled\nMaterial Requested"
+		},
+		{
+			"fieldname": "wo_status",
+			"label": "Work Order Status",
+			"fieldtype": "Select",
+			"options": "\nDraft\nSubmitted\nNot Started\nIn Process\nCompleted\nStopped\nClosed\nCancelled"
 		}
 	]
 };

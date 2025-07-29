@@ -17,6 +17,10 @@ def data(filters):
     _from, to = filters.get("from"), filters.get("to")
     if _from and to:
         conditions += f" AND tpp.posting_date BETWEEN '{_from}' AND '{to}'"
+    if filters.get("wo_status"):
+        conditions += f" AND two.status = '{filters.get('wo_status')}'"
+    if filters.get("pp_status"):
+        conditions += f" AND tpp.status = '{filters.get('pp_status')}'"
     
     sql = frappe.db.sql(f"""
         SELECT
@@ -27,8 +31,9 @@ def data(filters):
                 ELSE tpp.status 
             END AS `Production Plan Status`,
             CASE 
-                WHEN two.status = 'Draft' OR two.status IS NULL THEN 'Not Started' 
-                ELSE two.status 
+                WHEN two.status = 'Draft' OR two.status IS NULL THEN 'Not Started'
+                WHEN two.status = 'Closed' THEN 'Completed'
+                ELSE two.status
             END AS `Work Order Status`,
             tpp.total_planned_qty AS `Total Planned Qty`,
             tpp.total_produced_qty AS `Total Produced Qty`,

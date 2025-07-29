@@ -25,10 +25,11 @@ def set_required_and_available_raw_materials(self):
 
         for bom_item in bom.items:
             raw_item_code = bom_item.item_code
-            raw_qty = bom_item.qty
+            qty_per_unit = bom_item.qty
+            required_qty = qty_per_unit * plan_item.planned_qty
             available_qty = get_stock_qty_for_item(raw_item_code, warehouse)
 
-            total_required_qty += raw_qty
+            total_required_qty += required_qty
             total_available_qty += available_qty
 
         plan_item.custom_required_raw_materials = total_required_qty
