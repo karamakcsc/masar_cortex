@@ -47,7 +47,8 @@ doctype_js = {
     "Stock Entry" : "custom/stock_entry/stock_entry.js",
     "Sales Order" : "custom/sales_order/sales_order.js",
     "Item Group" : "custom/item_group/item_group.js",
-    "Delivery Note" : "custom/delivery_note/delivery_note.js"
+    "Delivery Note" : "custom/delivery_note/delivery_note.js",
+    "Item Price": "custom/item_price/item_price.js"
     }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -285,7 +286,9 @@ fixtures = [
                     "Stock Entry-custom_section_break_wgdbv",
                     "Stock Entry-custom_column_break_r87kr",
                     "Production Plan Item-custom_available_raw_materials",
-                    "Production Plan Item-custom_required_raw_materials"
+                    "Production Plan Item-custom_required_raw_materials",
+                    "Item Price-custom_rate_per_kg",
+                    "Item Price-custom_weight_per_unit"
             ]
         ]
     ]},
