@@ -12,6 +12,7 @@ class BulkItemPriceUpdate(Document):
     def validate(self):
         self.fetch_items()
         self.set_available_qty()
+        self.refresh_old_prices()
         
     def on_submit(self):
         self.update_item_price()
@@ -73,7 +74,7 @@ class BulkItemPriceUpdate(Document):
                 ) latest_ip ON ip.item_code = latest_ip.item_code AND ip.modified = latest_ip.latest_modified
                 WHERE ip.selling = 1
             ) tip ON tip.item_code = ti.name
-            LEFT JOIN `tabBin` tb ON tb.item_code = ti.name AND tb.warehouse = 'Finished Goods Store - CKTM'
+            LEFT JOIN `tabBin` tb ON tb.item_code = ti.name AND tb.warehouse = 'Finished Goods Store - MSCD'
             WHERE {conditions} AND ti.has_variants = 0
         """, as_dict=True)
         
@@ -108,12 +109,18 @@ class BulkItemPriceUpdate(Document):
                 if not item.new_price:
                     frappe.throw(f"Item {item.item_code} in row {item.idx} is missing new price.")
                 existing_price = frappe.db.sql("""
-                    SELECT price_list_rate FROM `tabItem Price`
-                    WHERE item_code = %s AND uom = %s AND price_list = %s AND selling = 1
+                    SELECT name FROM `tabItem Price`
+                    WHERE item_code = %s AND uom = %s AND price_list = %s AND valid_from = %s AND selling = 1
                     ORDER BY modified DESC LIMIT 1
-                """, (item.item_code, item.uom, item.price_list), as_dict=True)
-                existing_price = existing_price[0]['price_list_rate'] if existing_price else 0
-                if item.new_price and item.new_price != item.old_price and item.new_price != existing_price:
+                """, (item.item_code, item.uom, item.price_list, frappe.utils.nowdate(),), as_dict=True)
+                existing_price = existing_price[0]['name'] if existing_price else 0
+                if existing_price:
+                    ip_doc = frappe.get_doc("Item Price", existing_price)
+                    if item.new_price != ip_doc.price_list_rate:
+                        ip_doc.price_list_rate = item.new_price
+                        ip_doc.valid_from = frappe.utils.nowdate()
+                        ip_doc.save(ignore_permissions=True)
+                elif item.new_price and item.new_price != item.old_price:
                     new_item_price = frappe.new_doc("Item Price")
                     new_item_price.item_code = item.item_code
                     new_item_price.uom = item.uom
@@ -161,6 +168,22 @@ class BulkItemPriceUpdate(Document):
                 new_item_price.valid_from = frappe.utils.nowdate()
                 new_item_price.selling = 1
                 new_item_price.save(ignore_permissions=True)
+                
+    def refresh_old_prices(self):
+        if not self.items:
+            return
+        
+        for item in self.items:
+            price_data = frappe.db.sql("""
+                SELECT price_list_rate
+                FROM `tabItem Price`
+                WHERE item_code = %s AND uom = %s AND price_list = %s AND selling = 1
+                ORDER BY modified DESC
+                LIMIT 1
+            """, (item.item_code, item.uom, item.price_list), as_dict=True)
+            
+            item.old_price = price_data[0].price_list_rate if price_data else 0
+
 
 @frappe.whitelist()
 def available_qty_sql(item):
