@@ -108,17 +108,12 @@ class BulkItemPriceUpdate(Document):
                 if not item.new_price:
                     frappe.throw(f"Item {item.item_code} in row {item.idx} is missing new price.")
                 existing_price = frappe.db.sql("""
-                    SELECT name FROM `tabItem Price`
+                    SELECT price_list_rate FROM `tabItem Price`
                     WHERE item_code = %s AND uom = %s AND price_list = %s AND selling = 1
                     ORDER BY modified DESC LIMIT 1
                 """, (item.item_code, item.uom, item.price_list), as_dict=True)
-                existing_price = existing_price[0]['name'] if existing_price else None
-                if existing_price:
-                    # frappe.db.set_value("Item Price", item.item_price_ref, "price_list_rate", item.new_price)
-                    item_price_doc = frappe.get_doc("Item Price", existing_price)
-                    item_price_doc.price_list_rate = item.new_price
-                    item_price_doc.save(ignore_permissions=True)
-                elif not item.old_price and item.new_price:
+                existing_price = existing_price[0]['price_list_rate'] if existing_price else 0
+                if item.new_price and item.new_price != item.old_price and item.new_price != existing_price:
                     new_item_price = frappe.new_doc("Item Price")
                     new_item_price.item_code = item.item_code
                     new_item_price.uom = item.uom
