@@ -15,3 +15,4 @@ def create_gate_pass(dn_name):
     frappe.db.commit()
 
     return gate_pass.name
+##
