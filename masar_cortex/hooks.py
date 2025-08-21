@@ -288,7 +288,9 @@ fixtures = [
                     "Production Plan Item-custom_available_raw_materials",
                     "Production Plan Item-custom_required_raw_materials",
                     "Item Price-custom_rate_per_kg",
-                    "Item Price-custom_weight_per_unit"
+                    "Item Price-custom_weight_per_unit",
+                    "Customer Credit Limit-custom_bypass_overdue_check",
+                    "Customer Credit Limit-custom_overdue_limit"
             ]
         ]
     ]},
@@ -332,7 +334,12 @@ fixtures = [
                     "Delivery Note Item-base_rate-permlevel",
                     "Delivery Note Item-amount-permlevel",
                     "Delivery Note Item-rate-permlevel",
-                    "Sales Order Item-rate-read_only_depends_on"
+                    "Sales Order Item-rate-read_only_depends_on",
+                    "Customer Credit Limit-bypass_credit_limit_check-read_only_depends_on",
+                    "Customer Credit Limit-bypass_credit_limit_check-columns",
+                    "Customer Credit Limit-credit_limit-columns",
+                    "Customer Credit Limit-company-columns",
+                    "Customer Credit Limit-credit_limit-read_only_depends_on"
                 ]
             ]
         ]
