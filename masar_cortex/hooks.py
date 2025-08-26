@@ -156,6 +156,7 @@ doc_events = {
     },
     "Sales Order": {
         "validate": "masar_cortex.custom.sales_order.sales_order.validate",
+        "on_submit": "masar_cortex.custom.sales_order.sales_order.on_submit"
     },
     "Production Plan": {
         "validate": "masar_cortex.custom.production_plan.production_plan.validate"

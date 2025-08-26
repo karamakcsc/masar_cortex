@@ -4,8 +4,9 @@ from frappe import _, msgprint
 from frappe.utils.user import get_users_with_role
 
 def validate(self, method):
-    validate_overdue_limit(self)
     validate_actual_qty(self)
+def on_submit(self, method):
+    validate_overdue_limit(self)
 
         
 def validate_actual_qty(self):
