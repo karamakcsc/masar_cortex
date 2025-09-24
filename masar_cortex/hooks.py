@@ -291,7 +291,9 @@ fixtures = [
                     "Item Price-custom_rate_per_kg",
                     "Item Price-custom_weight_per_unit",
                     "Customer Credit Limit-custom_bypass_overdue_check",
-                    "Customer Credit Limit-custom_overdue_limit"
+                    "Customer Credit Limit-custom_overdue_limit",
+                    "Sales Order-custom_do",
+                    "Sales Order-custom_invoice"
             ]
         ]
     ]},

@@ -4,6 +4,7 @@ from frappe import _, msgprint
 from frappe.utils.user import get_users_with_role
 
 def validate(self, method):
+    validate_checkbox(self)
     validate_actual_qty(self)
 def on_submit(self, method):
     validate_overdue_limit(self)
@@ -14,6 +15,10 @@ def validate_actual_qty(self):
         for item in self.items:
             if item.qty > item.custom_available_qty or item.custom_available_qty < 0:
                 frappe.throw(f"Available quantity for item {item.item_code} is less than the requested quantity.")
+                
+def validate_checkbox(self):
+    if self.custom_do and self.custom_invoice:
+        frappe.throw("Please select either 'Do' or 'Invoice'. Both cannot be selected at the same time.")
                 
 @frappe.whitelist()            
 def available_qty_sql(item, warehouse):

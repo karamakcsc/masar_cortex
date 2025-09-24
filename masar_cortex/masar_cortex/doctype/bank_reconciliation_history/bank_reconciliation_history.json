@@ -1,0 +1,183 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-09-09 10:16:53.536623",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "bank_account",
+  "column_break_tvkl",
+  "from_date",
+  "to_date",
+  "from_reference_date",
+  "to_reference_date",
+  "filter_by_reference_date",
+  "column_break_cvau",
+  "account_currency",
+  "account_opening_balance",
+  "bank_statement_closing_balance",
+  "section_break_vfce",
+  "closing_balance_bs",
+  "column_break_onvs",
+  "closing_balance_erp",
+  "column_break_itfk",
+  "difference",
+  "section_break_mkyg",
+  "amended_from",
+  "column_break_zeei",
+  "naming_series"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_mkyg",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Bank Reconciliation History",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "bank_account",
+   "fieldtype": "Link",
+   "label": "Bank Account",
+   "options": "Bank Account"
+  },
+  {
+   "fieldname": "column_break_tvkl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: doc.bank_account && !doc.filter_by_reference_date",
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date"
+  },
+  {
+   "depends_on": "eval: doc.bank_account && !doc.filter_by_reference_date",
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date"
+  },
+  {
+   "depends_on": "eval:doc.filter_by_reference_date",
+   "fieldname": "from_reference_date",
+   "fieldtype": "Date",
+   "label": "From Reference Date"
+  },
+  {
+   "depends_on": "eval:doc.filter_by_reference_date",
+   "fieldname": "to_reference_date",
+   "fieldtype": "Date",
+   "label": "To Reference Date"
+  },
+  {
+   "default": "0",
+   "fieldname": "filter_by_reference_date",
+   "fieldtype": "Check",
+   "label": "Filter by Reference Date"
+  },
+  {
+   "fieldname": "column_break_cvau",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "account_currency",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Account Currency",
+   "options": "Currency"
+  },
+  {
+   "depends_on": "eval: doc.bank_statement_from_date",
+   "fieldname": "account_opening_balance",
+   "fieldtype": "Currency",
+   "label": "Account Opening Balance"
+  },
+  {
+   "depends_on": "eval: doc.bank_statement_to_date",
+   "fieldname": "bank_statement_closing_balance",
+   "fieldtype": "Currency",
+   "label": "Closing Balance"
+  },
+  {
+   "fieldname": "section_break_vfce",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "closing_balance_bs",
+   "fieldtype": "Currency",
+   "label": "Closing Balance as per Bank Statement"
+  },
+  {
+   "fieldname": "column_break_onvs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "closing_balance_erp",
+   "fieldtype": "Currency",
+   "label": "Closing Balance as per ERP"
+  },
+  {
+   "fieldname": "column_break_itfk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "difference",
+   "fieldtype": "Currency",
+   "label": "Difference"
+  },
+  {
+   "fieldname": "column_break_zeei",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "BNK-REC-.YYYY.-",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "BNK-REC-.YYYY.-"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-09-09 10:25:23.725565",
+ "modified_by": "Administrator",
+ "module": "Masar Cortex",
+ "name": "Bank Reconciliation History",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
