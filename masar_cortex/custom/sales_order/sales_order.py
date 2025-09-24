@@ -17,6 +17,8 @@ def validate_actual_qty(self):
                 frappe.throw(f"Available quantity for item {item.item_code} is less than the requested quantity.")
                 
 def validate_checkbox(self):
+    if not self.custom_do and not self.custom_invoice:
+        frappe.throw("Please select either 'Do' or 'Invoice'.")
     if self.custom_do and self.custom_invoice:
         frappe.throw("Please select either 'Do' or 'Invoice'. Both cannot be selected at the same time.")
                 
