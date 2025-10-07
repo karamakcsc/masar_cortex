@@ -1,4 +1,4 @@
-# Copyright (c) 2025, KCSC and contributors
+# Copyright (c) 2025, KCSC
 # For license information, please see license.txt
 
 import frappe
@@ -6,132 +6,111 @@ from frappe import _
 
 
 def execute(filters=None):
-	columns, data = [], []
+	filters = filters or {}
 	columns = get_columns()
-	data = get_data(filters, columns)
+	data = get_data(filters)
 	return columns, data
 
 
+# ------------------------------------------------------------------------
+# Columns
+# ------------------------------------------------------------------------
 def get_columns():
 	return [
-		{
-			"label": _("Item Code"),
-			"fieldname": "item_code",
-			"fieldtype": "Link",
-			"options": "Item",
-			"width": 120,
-		},
-		{"label": _("Item Name"), "fieldname": "item_name", "fieldtype": "Data", "width": 120},
-		{
-			"label": _("Item Group"),
-			"fieldname": "item_group",
-			"fieldtype": "Link",
-			"options": "Item Group",
-			"width": 120,
-		},
-		{"label": _("Weight Per Unit"), "fieldname": "wpu", "fieldtype": "Float", "width": 120},
-		{"label": _("Weight"), "fieldname": "theoretical_wpu", "fieldtype": "Float", "width": 120},
-		{
-			"label": _("Warehouse"),
-			"fieldname": "warehouse",
-			"fieldtype": "Link",
-			"options": "Warehouse",
-			"width": 120,
-		},
+		{"label": _("Item Code"), "fieldname": "item_code", "fieldtype": "Link", "options": "Item", "width": 130},
+		{"label": _("Item Name"), "fieldname": "item_name", "fieldtype": "Data", "width": 160},
+		{"label": _("Item Group"), "fieldname": "item_group", "fieldtype": "Link", "options": "Item Group", "width": 130},
+		{"label": _("Weight Per Unit"), "fieldname": "weight_per_unit", "fieldtype": "Float", "width": 120},
+		{"label": _("Theoretical WPU"), "fieldname": "theoretical_wpu", "fieldtype": "Float", "width": 130},
+		{"label": _("Warehouse"), "fieldname": "warehouse", "fieldtype": "Link", "options": "Warehouse", "width": 150},
 		{"label": _("Rate Per Kg"), "fieldname": "rate_per_kg", "fieldtype": "Float", "width": 120},
-		{
-			"label": _("Available Qty"),
-			"fieldname": "available_qty",
-			"fieldtype": "Float",
-			"width": 120,
-		},
-		{"label": _("Selling Price"), "fieldname": "selling_rate", "fieldtype": "Currency", "width": 120},
-		{"label": _("Total Amount"), "fieldname": "total_amount", "fieldtype": "Currency", "width": 120},
-		{"label": _("Total Weight"), "fieldname": "total_weight", "fieldtype": "Float", "width": 120},
+		{"label": _("Available Qty"), "fieldname": "available_qty", "fieldtype": "Float", "width": 120},
+		{"label": _("Selling Rate"), "fieldname": "selling_rate", "fieldtype": "Currency", "width": 130},
+		{"label": _("Total Amount"), "fieldname": "total_amount", "fieldtype": "Currency", "width": 130},
+		{"label": _("Total Weight"), "fieldname": "total_weight", "fieldtype": "Float", "width": 130},
 	]
 
 
-def get_data(filters, columns):
-	item_price_qty_data = []
-	item_price_qty_data = get_item_price_qty_data(filters)
-	return item_price_qty_data
-
-
-def get_item_price_qty_data(filters):
-	conditions = " 1=1 "
-	if filters.get("item_code"):
-		conditions += f" AND pl.item_code = '{filters.get('item_code')}'"
-	if filters.get("warehouse"):
-		conditions += f" AND b.warehouse = '{filters.get('warehouse')}'"
-	query = f"""
-			WITH price_list AS ( SELECT 
-				ip.item_code , 
-				ip.price_list,
-				ip.price_list_rate
-			FROM `tabItem Price` ip 
-			WHERE ip.selling = 1
-			AND ip.modified = (
-                SELECT MAX(modified)
-                FROM `tabItem Price` ip2
-                WHERE ip2.item_code = ip.item_code AND ip2.selling = 1
-            )
-			GROUP BY ip.item_code ) , 
-			item AS (SELECT  
-				item_code , 
-				item_name , 
-				item_group , 
-				weight_per_unit , 
-				custom_theoretical_wpu 
-			FROM tabItem i 
-			), 
-			bin AS (
-				SELECT item_code , warehouse  , 
-				(actual_qty  - reserved_qty) AS available_qty 
-				FROM tabBin tb 
-				HAVING available_qty > 0 
-			) , 
-			by_kg AS (
-			SELECT item_code , rate_per_kg FROM 
-			`tabBulk Item Price Item` tbipi
-			WHERE docstatus = 1
-			AND tbipi.modified = (
-                SELECT MAX(modified)
-                FROM `tabBulk Item Price Item` tbipi2
-                WHERE tbipi2.item_code = tbipi.item_code
-            )
-			GROUP BY item_code 
-			)
-			SELECT 
-				pl.item_code , i.item_name , i.item_group , 
-				i.weight_per_unit , i.custom_theoretical_wpu , 
-				b.warehouse ,  b.available_qty , kg.rate_per_kg , pl.price_list , pl.price_list_rate
-			FROM price_list pl
-			INNER JOIN item  i ON pl.item_code = i.item_code 
-			INNER JOIN bin b ON b.item_code = pl.item_code
-			INNER JOIN by_kg kg ON  pl.item_code = kg.item_code
-			WHERE {conditions}
-	"""
-
-	item_results = frappe.db.sql(query, as_dict=True)
-
+# ------------------------------------------------------------------------
+# Data Fetching
+# ------------------------------------------------------------------------
+def get_data(filters):
+	items = get_item_data(filters)
 	result = []
-	for item_dict in item_results:
-		available_qty = item_dict.available_qty or 0
-		theoretical_wpu = item_dict.custom_theoretical_wpu or 0
-		price = item_dict.price_list_rate or 0
+
+	for d in items:
+		available_qty = d.available_qty or 0
+		theoretical_wpu = d.custom_theoretical_wpu or 0
+		price = d.price_list_rate or 0
+		rate_per_kg = d.rate_per_kg or 0
 
 		result.append({
-			"item_code": item_dict.item_code,
-			"item_name": item_dict.item_name,
-			"item_group": item_dict.item_group,
-			"wpu": item_dict.weight_per_unit,
+			"item_code": d.item_code,
+			"item_name": d.item_name,
+			"item_group": d.item_group,
+			"weight_per_unit": d.weight_per_unit,
 			"theoretical_wpu": theoretical_wpu,
-			"warehouse": item_dict.warehouse,
+			"warehouse": d.warehouse,
 			"available_qty": available_qty,
-			"rate_per_kg": item_dict.rate_per_kg,
+			"rate_per_kg": rate_per_kg,
 			"selling_rate": price,
 			"total_amount": available_qty * price,
 			"total_weight": available_qty * theoretical_wpu,
 		})
 
 	return result
+
+
+# ------------------------------------------------------------------------
+# Optimized Query
+# ------------------------------------------------------------------------
+def get_item_data(filters):
+	conditions = []
+	values = {}
+
+	if filters.get("item_code"):
+		conditions.append("i.item_code = %(item_code)s")
+		values["item_code"] = filters["item_code"]
+
+	if filters.get("warehouse"):
+		conditions.append("b.warehouse = %(warehouse)s")
+		values["warehouse"] = filters["warehouse"]
+
+	where_clause = " AND ".join(conditions) if conditions else "1=1"
+
+	# ⚡ Optimized SQL
+	# - Uses window functions instead of correlated subqueries
+	# - Avoids unnecessary GROUP BY
+	# - Only joins the latest records once per table
+	query = f"""
+		WITH latest_price AS (
+			SELECT ip.item_code, ip.price_list_rate,
+				   ROW_NUMBER() OVER (PARTITION BY ip.item_code ORDER BY ip.modified DESC) AS rn
+			FROM `tabItem Price` ip
+			WHERE ip.selling = 1
+		),
+		latest_kg AS (
+			SELECT tbipi.item_code, tbipi.rate_per_kg,
+				   ROW_NUMBER() OVER (PARTITION BY tbipi.item_code ORDER BY tbipi.modified DESC) AS rn
+			FROM `tabBulk Item Price Item` tbipi
+			WHERE tbipi.docstatus = 1
+		)
+		SELECT
+			i.item_code,
+			i.item_name,
+			i.item_group,
+			i.weight_per_unit,
+			i.custom_theoretical_wpu,
+			b.warehouse,
+			(b.actual_qty - b.reserved_qty) AS available_qty,
+			lp.price_list_rate,
+			lkg.rate_per_kg
+		FROM `tabItem` i
+		INNER JOIN `tabBin` b ON b.item_code = i.item_code
+		LEFT JOIN latest_price lp ON lp.item_code = i.item_code AND lp.rn = 1
+		LEFT JOIN latest_kg lkg ON lkg.item_code = i.item_code AND lkg.rn = 1
+		WHERE (b.actual_qty - b.reserved_qty) > 0
+		  AND {where_clause}
+	"""
+
+	return frappe.db.sql(query, values=values, as_dict=True)
