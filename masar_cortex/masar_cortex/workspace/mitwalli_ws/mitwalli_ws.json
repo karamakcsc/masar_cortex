@@ -115,8 +115,87 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 7,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Stock Balance",
+   "link_count": 0,
+   "link_to": "Stock Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Stock Ledger",
+   "link_count": 0,
+   "link_to": "Stock Ledger",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Purchase Order Analysis",
+   "link_count": 0,
+   "link_to": "Purchase Order Analysis",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Serial and Batch Summary",
+   "link_count": 0,
+   "link_to": "Serial and Batch Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Production Plan Report",
+   "link_count": 0,
+   "link_to": "Production Plan Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Delivery Note Report",
+   "link_count": 0,
+   "link_to": "Delivery Note Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Item Price Stock - KTM",
+   "link_count": 0,
+   "link_to": "Item Price Stock - KTM",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Master Data",
-   "link_count": 8,
+   "link_count": 9,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -204,84 +283,15 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Reports",
-   "link_count": 7,
+   "label": "Bank Reconciliation History",
+   "link_count": 0,
+   "link_to": "Bank Reconciliation History",
    "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Stock Balance",
-   "link_count": 0,
-   "link_to": "Stock Balance",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Stock Ledger",
-   "link_count": 0,
-   "link_to": "Stock Ledger",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Purchase Order Analysis",
-   "link_count": 0,
-   "link_to": "Purchase Order Analysis",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Serial and Batch Summary",
-   "link_count": 0,
-   "link_to": "Serial and Batch Summary",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Production Plan Report",
-   "link_count": 0,
-   "link_to": "Production Plan Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Delivery Note Report",
-   "link_count": 0,
-   "link_to": "Delivery Note Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Item Price Stock - KTM",
-   "link_count": 0,
-   "link_to": "Item Price Stock - KTM",
-   "link_type": "Report",
    "onboard": 0,
    "type": "Link"
   }
  ],
- "modified": "2025-07-28 15:32:43.024263",
+ "modified": "2025-10-08 11:34:52.410605",
  "modified_by": "Administrator",
  "module": "Masar Cortex",
  "name": "Mitwalli WS",

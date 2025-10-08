@@ -10,6 +10,11 @@ frappe.ui.form.on("Bank Reconciliation Tool", {
 				args: {
 					self: frm.doc
 				},
+				callback: function (r) {
+					if (r.message) {
+						frappe.msgprint(__("Record Saved Successfully"));
+					}
+				}
 			});
 		});
     }

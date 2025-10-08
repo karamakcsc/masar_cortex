@@ -44,11 +44,13 @@ app_license = "mit"
 
 # include js in doctype views
 doctype_js = {
-    "Stock Entry" : "custom/stock_entry/stock_entry.js",
-    "Sales Order" : "custom/sales_order/sales_order.js",
-    "Item Group" : "custom/item_group/item_group.js",
-    "Delivery Note" : "custom/delivery_note/delivery_note.js",
-    "Item Price": "custom/item_price/item_price.js"
+        "Stock Entry" : "custom/stock_entry/stock_entry.js",
+        "Sales Order" : "custom/sales_order/sales_order.js",
+        "Item Group" : "custom/item_group/item_group.js",
+        "Delivery Note" : "custom/delivery_note/delivery_note.js",
+        "Item Price": "custom/item_price/item_price.js",
+        "Bank Reconciliation Tool": "custom/bank_reconciliation_tool/bank_reconciliation_tool.js"
+        
     }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}

@@ -102,13 +102,13 @@
    "options": "Currency"
   },
   {
-   "depends_on": "eval: doc.bank_statement_from_date",
+   "depends_on": "eval: doc.from_date",
    "fieldname": "account_opening_balance",
    "fieldtype": "Currency",
    "label": "Account Opening Balance"
   },
   {
-   "depends_on": "eval: doc.bank_statement_to_date",
+   "depends_on": "eval: doc.to_date",
    "fieldname": "bank_statement_closing_balance",
    "fieldtype": "Currency",
    "label": "Closing Balance"
@@ -156,10 +156,11 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-09 10:25:23.725565",
+ "modified": "2025-10-08 11:30:29.165834",
  "modified_by": "Administrator",
  "module": "Masar Cortex",
  "name": "Bank Reconciliation History",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
