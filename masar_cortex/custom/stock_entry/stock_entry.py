@@ -135,10 +135,10 @@ def recalculate_costs(self):
         #### Loop For Scrap, Finished Checkbox ####
         
         for item in self.get('items'):
-            if item.get('t_warehouse') in 'Semi-Finished Goods Store':
+            if item.get('t_warehouse') and item.get('t_warehouse') in 'Semi-Finished Goods Store':
                 frappe.db.set_value(item['doctype'], item['name'], "is_finished_item", 1)
                 item['is_finished_item'] = 1
-            if item.get('t_warehouse') in 'Scrap Store':
+            if item.get('t_warehouse') and item.get('t_warehouse') in 'Scrap Store':
                 frappe.db.set_value(item['doctype'], item['name'], "is_scrap_item", 1)
                 item['is_scrap_item'] = 1
         
