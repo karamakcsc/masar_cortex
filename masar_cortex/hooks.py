@@ -344,7 +344,12 @@ fixtures = [
                     "Customer Credit Limit-bypass_credit_limit_check-columns",
                     "Customer Credit Limit-credit_limit-columns",
                     "Customer Credit Limit-company-columns",
-                    "Customer Credit Limit-credit_limit-read_only_depends_on"
+                    "Customer Credit Limit-credit_limit-read_only_depends_on",
+                    "Sales Order-tax_category-mandatory_depends_on",
+                    "Sales Order-taxes_and_charges-mandatory_depends_on",
+                    "Sales Order-taxes_and_charges-depends_on",
+                    "Sales Order-tax_category-depends_on",
+                    "Sales Order-taxes_and_charges-depends_on"
                 ]
             ]
         ]
