@@ -8,7 +8,7 @@ frappe.query_reports["BOM Stock-KTM"] = {
 			label: __("BOM"),
 			fieldtype: "Link",
 			options: "BOM",
-			reqd: 1,
+			// reqd: 1,
 		},
 		{
 			fieldname: "warehouse",
