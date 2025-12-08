@@ -10,6 +10,13 @@ frappe.query_reports["BOM Stock-KTM"] = {
 			options: "BOM",
 			// reqd: 1,
 		},
+				{
+			fieldname: "item_code",
+			label: __("Item Code"),
+			fieldtype: "Link",
+			options: "Item",
+			// reqd: 1,
+		},
 		{
 			fieldname: "warehouse",
 			label: __("Warehouse"),
