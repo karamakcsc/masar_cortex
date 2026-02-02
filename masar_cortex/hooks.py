@@ -162,7 +162,10 @@ doc_events = {
     },
     "Production Plan": {
         "validate": "masar_cortex.custom.production_plan.production_plan.validate"
-    }
+    },
+	"Expense Entry": {
+		"on_update": "masar_cortex.api.setup"
+	}
 }
 
 # Scheduled Tasks
@@ -295,7 +298,12 @@ fixtures = [
                     "Customer Credit Limit-custom_bypass_overdue_check",
                     "Customer Credit Limit-custom_overdue_limit",
                     "Sales Order-custom_do",
-                    "Sales Order-custom_invoice"
+                    "Sales Order-custom_invoice",
+                    "Accounts Settings-expense_settings",
+					"Accounts Settings-default_mode_of_payment",
+					"Accounts Settings-column_break_16",
+					"Accounts Settings-notify_all_approvers",
+					"Accounts Settings-create_journals_entries_automatically"
             ]
         ]
     ]},
@@ -354,4 +362,40 @@ fixtures = [
             ]
         ]
     }
+]
+
+
+fixtures = ["Workflow", "Workflow State", "Workflow Action Master",
+	{
+		"dt": "Print Format",
+		"filters": [
+			[
+				"name", "in", [
+					"Expense Entry"
+				]
+			]
+		]
+
+	},
+	{
+		"dt": "Notification",
+			"filters": [
+            [
+                "name", "in", [
+                    "Expense Entry",
+                ]
+            ]
+        ]
+	},
+	{
+		"dt": "Report",
+			"filters": [
+				[
+					"ref_doctype", "in", [
+						"Expense Entry",
+						"Journal Entry"
+					]
+				]
+			]
+	}
 ]

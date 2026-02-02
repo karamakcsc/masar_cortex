@@ -1,0 +1,110 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-03-07 11:12:23.198350",
+  "name": "Draft",
+  "style": "",
+  "workflow_state_name": "Draft"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-03-07 11:12:55.376227",
+  "name": "Discussion (Acquisition)",
+  "style": "",
+  "workflow_state_name": "Discussion (Acquisition)"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-03-07 11:13:03.432662",
+  "name": "Under Operator Approval",
+  "style": "",
+  "workflow_state_name": "Under Operator Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-03-07 11:13:11.357645",
+  "name": "Under SP Approval",
+  "style": "",
+  "workflow_state_name": "Under SP Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-03-07 11:14:56.001923",
+  "name": "Initiation of Discussion",
+  "style": "",
+  "workflow_state_name": "Initiation of Discussion"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "question-sign",
+  "modified": "2020-10-11 00:53:35.970465",
+  "name": "Pending",
+  "style": "",
+  "workflow_state_name": "Pending"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "ok-sign",
+  "modified": "2020-10-11 00:53:35.973463",
+  "name": "Approved",
+  "style": "Success",
+  "workflow_state_name": "Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "remove",
+  "modified": "2020-10-11 00:53:35.975307",
+  "name": "Rejected",
+  "style": "Danger",
+  "workflow_state_name": "Rejected"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2020-10-21 22:21:33.442328",
+  "name": "Requested",
+  "style": "",
+  "workflow_state_name": "Requested"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-09-28 11:29:36.654046",
+  "name": "Finance Approval",
+  "style": "",
+  "workflow_state_name": "Finance Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-09-28 11:27:26.061304",
+  "name": "For Review",
+  "style": "",
+  "workflow_state_name": "For Review"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2024-09-28 11:32:49.120729",
+  "name": "Final Approval",
+  "style": "",
+  "workflow_state_name": "Final Approval"
+ }
+]
