@@ -364,39 +364,3 @@ fixtures = [
         ]
     }
 ]
-
-
-fixtures = ["Workflow", "Workflow State", "Workflow Action Master",
-	{
-		"dt": "Print Format",
-		"filters": [
-			[
-				"name", "in", [
-					"Expense Entry"
-				]
-			]
-		]
-
-	},
-	{
-		"dt": "Notification",
-			"filters": [
-            [
-                "name", "in", [
-                    "Expense Entry",
-                ]
-            ]
-        ]
-	},
-	{
-		"dt": "Report",
-			"filters": [
-				[
-					"ref_doctype", "in", [
-						"Expense Entry",
-						"Journal Entry"
-					]
-				]
-			]
-	}
-]
