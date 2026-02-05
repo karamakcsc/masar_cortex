@@ -38,7 +38,8 @@
   "payment_reference",
   "clearance_date",
   "status",
-  "amended_from"
+  "amended_from",
+  "connections_tab"
  ],
  "fields": [
   {
@@ -198,6 +199,7 @@
   {
    "fieldname": "status",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Status",
    "options": "Pending\nApproved\nRejected"
   },
@@ -238,11 +240,22 @@
    "fieldname": "use_bank_account",
    "fieldtype": "Check",
    "label": "Use Bank Account"
+  },
+  {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections",
+   "show_dashboard": 1
   }
  ],
  "is_submittable": 1,
- "links": [],
- "modified": "2026-02-02 13:51:44.077764",
+ "links": [
+  {
+   "link_doctype": "Journal Entry",
+   "link_fieldname": "custom_expense_reference"
+  }
+ ],
+ "modified": "2026-02-05 11:22:46.090544",
  "modified_by": "Administrator",
  "module": "Masar Cortex",
  "name": "Expense Entry",

@@ -124,7 +124,7 @@ def make_journal_entry(expense_entry):
 
         # check for duplicates
         
-        if frappe.db.exists({'doctype': 'Journal Entry', 'bill_no': expense_entry.name}):
+        if frappe.db.exists({'doctype': 'Journal Entry', 'custom_expense_reference': expense_entry.name}):
             frappe.throw(
                 title="Error",
                 msg="Journal Entry {} already exists.".format(expense_entry.name)
@@ -230,7 +230,7 @@ def make_journal_entry(expense_entry):
             'reference_date': expense_entry.clearance_date,
             'cheque_no': expense_entry.payment_reference,
             'pay_to_recd_from': expense_entry.payment_to,
-            'bill_no': expense_entry.name
+            'custom_expense_reference': expense_entry.name
         })
 
         user = frappe.get_doc("User", frappe.session.user)

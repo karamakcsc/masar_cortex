@@ -60,19 +60,17 @@ def data(filters):
             ON ti.name = tppi.item_code
         LEFT JOIN (
             SELECT
-                parent AS stock_entry,
-                SUM(qty) AS scrap_qty,
-                MAX(item_code) AS scrap_item
-            FROM `tabStock Entry Detail`
-            WHERE is_scrap_item = 1
-            GROUP BY parent
-        ) tsei ON tsei.stock_entry = (
-            SELECT name 
-            FROM `tabStock Entry` 
-            WHERE work_order = two.name 
-            ORDER BY creation DESC 
-            LIMIT 1
-        )
+                se.work_order,
+                SUM(sed.qty) AS scrap_qty,
+                sed.item_code AS scrap_item
+            FROM `tabStock Entry` se
+            INNER JOIN `tabStock Entry Detail` sed
+                ON sed.parent = se.name
+                AND sed.is_scrap_item = 1
+            WHERE se.docstatus = 1
+            GROUP BY se.work_order
+        ) tsei
+            ON tsei.work_order = two.name
         WHERE {conditions} AND tpp.docstatus = 1
 	""")
     

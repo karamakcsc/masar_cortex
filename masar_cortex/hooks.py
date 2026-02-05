@@ -303,7 +303,8 @@ fixtures = [
 					"Accounts Settings-default_mode_of_payment",
 					"Accounts Settings-column_break_16",
 					"Accounts Settings-notify_all_approvers",
-					"Accounts Settings-create_journals_entries_automatically"
+					"Accounts Settings-create_journals_entries_automatically",
+                    "Journal Entry-custom_expense_reference"
             ]
         ]
     ]},
