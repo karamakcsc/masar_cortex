@@ -204,25 +204,28 @@ class StockBalanceReport:
 			qty_diff = flt(entry.actual_qty)
 
 		value_diff = flt(entry.stock_value_difference)
-
+		weight = flt(entry.weight_per_unit) or 1
+		qty_diff_con = qty_diff * weight
 		if entry.posting_date < self.from_date or entry.voucher_no in self.opening_vouchers.get(
 			entry.voucher_type, []
 		):
 			qty_dict.opening_qty += qty_diff
 			qty_dict.opening_val += value_diff
-
+		
 		elif entry.posting_date >= self.from_date and entry.posting_date <= self.to_date:
 			if flt(qty_diff, self.float_precision) >= 0:
 				qty_dict.in_qty += qty_diff
 				qty_dict.in_val += value_diff
+				qty_dict.in_qty_con += qty_diff_con
 			else:
 				qty_dict.out_qty += abs(qty_diff)
 				qty_dict.out_val += abs(value_diff)
-
+				qty_dict.out_qty_con += abs(qty_diff_con)
+		
 		qty_dict.val_rate = entry.valuation_rate
 		qty_dict.bal_qty += qty_diff
 		qty_dict.bal_val += value_diff
-		qty_dict.bal_qty_con = qty_dict.bal_qty / (flt(entry.weight_per_unit) or 1)
+		qty_dict.bal_qty_con = qty_dict.bal_qty * weight
 
 	def initialize_data(self, item_warehouse_map, group_by_key, entry):
 		opening_data = self.opening_data.get(group_by_key, {})
@@ -243,10 +246,12 @@ class StockBalanceReport:
 				"in_val": 0.0,
 				"out_qty": 0.0,
 				"out_val": 0.0,
+				"in_qty_con": 0.0,
+				"out_qty_con": 0.0,
 				"bal_qty": opening_data.get("bal_qty") or 0.0,
 				"bal_val": opening_data.get("bal_val") or 0.0,
 				"val_rate": 0.0,
-				"bal_qty_con": flt(opening_data.get("bal_qty"), self.float_precision) / (flt(entry.weight_per_unit) or 1),
+				"bal_qty_con": flt(opening_data.get("bal_qty"), self.float_precision) * (flt(entry.weight_per_unit) or 1),
 
 			}
 		)
@@ -467,12 +472,26 @@ class StockBalanceReport:
 					"width": 80,
 					"convertible": "qty",
 				},
+				{
+					"label": _("In Qty (Kg)"),
+					"fieldname": "in_qty_con",
+					"fieldtype": "Float",
+					"width": 100,
+					"convertible": "qty",
+				},
 				{"label": _("In Value"), "fieldname": "in_val", "fieldtype": "Float", "width": 80},
 				{
 					"label": _("Out Qty"),
 					"fieldname": "out_qty",
 					"fieldtype": "Float",
 					"width": 80,
+					"convertible": "qty",
+				},
+				{
+					"label": _("Out Qty (Kg)"),
+					"fieldname": "out_qty_con",
+					"fieldtype": "Float",
+					"width": 110,
 					"convertible": "qty",
 				},
 				{"label": _("Out Value"), "fieldname": "out_val", "fieldtype": "Float", "width": 80},
